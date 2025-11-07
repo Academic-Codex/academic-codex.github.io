@@ -96,9 +96,11 @@ header {
     text-align: center;
     color: #fff;
     background: #{{ site.color.primary }
+    margin-top: 80px;
 }
 
 ;
+
 }
 
 header .container {
@@ -167,7 +169,7 @@ header .intro-text .skills {
     text-transform: uppercase;
     font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 700;
-    background-color: transparent;
+    background-color: rgba(34, 34, 34, 0.6);
 }
 
 .navbar a:focus {
