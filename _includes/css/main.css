@@ -1,3 +1,4 @@
+/* prettier-ignore */
 /*!
  * Start Bootstrap - Freelancer Bootstrap Theme (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
@@ -22,10 +23,7 @@ a:focus,
 a:active,
 a.active {
     outline: 0;
-    color: #{{ site.color.primary }
-}
-
-;
+    color: #{{ site.color.primary }};
 }
 
 h1,
@@ -67,25 +65,16 @@ hr.star-light {
 
 hr.star-light:after {
     color: #fff;
-    background-color: #{{ site.color.primary }
-}
-
-;
+    background-color: #{{ site.color.primary }};
 }
 
 hr.star-primary {
-    border-color: #{{ site.color.secondary }
-}
-
-;
+    border-color: #{{ site.color.secondary }};
 }
 
 hr.star-primary:after {
-    color: #{{ site.color.secondary }
-}
-
-;
-background-color: #fff;
+    color: #{{ site.color.secondary }};
+    background-color: #fff;
 }
 
 .img-centered {
@@ -95,12 +84,7 @@ background-color: #fff;
 header {
     text-align: center;
     color: #fff;
-    background: #{{ site.color.primary }
-    margin-top: 80px;
-}
-
-;
-
+    background: #{{ site.color.primary } margin-top: 80px;};
 }
 
 header .container {
@@ -200,10 +184,7 @@ section h2 {
 
 section.success {
     color: #fff;
-    background: #{{ site.color.primary }
-}
-
-;
+    background: #{{ site.color.primary }};
 }
 
 @media(max-width:767px) {
@@ -233,17 +214,10 @@ section.success {
     width: 100%;
     height: 100%;
     opacity: 0;
-
-    background: rgba({
-            {
-            site.color.primary-rgb
-        }
-    }
-
-    , .9);
--webkit-transition: all ease .5s;
--moz-transition: all ease .5s;
-transition: all ease .5s;
+    background: rgba({{site.color.primary-rgb}}, .9);
+    -webkit-transition: all ease .5s;
+    -moz-transition: all ease .5s;
+    transition: all ease .5s;
 }
 
 #portfolio .portfolio-item .portfolio-link .caption:hover {
@@ -324,11 +298,8 @@ transition: all ease .5s;
 .btn-outline:active,
 .btn-outline.active {
     border: solid 2px #fff;
-    color: #{{ site.color.primary }
-}
-
-;
-background: #fff;
+    color: #{{ site.color.primary }};
+    background: #fff;
 }
 
 .floating-label-form-group {
@@ -380,10 +351,7 @@ background: #fff;
 }
 
 .floating-label-form-group-with-focus label {
-    color: #{{ site.color.primary }
-}
-
-;
+    color: #{{ site.color.primary }};
 }
 
 form .row:first-child .floating-label-form-group {
@@ -400,10 +368,7 @@ footer h3 {
 
 footer .footer-above {
     padding-top: 50px;
-    background-color: #{{ site.color.secondary }
-}
-
-;
+    background-color: #{{ site.color.secondary }};
 }
 
 footer .footer-col {
@@ -412,10 +377,7 @@ footer .footer-col {
 
 footer .footer-below {
     padding: 25px 0;
-    background-color: #{{ site.color.secondary-dark }
-}
-
-;
+    background-color: #{{ site.color.secondary-dark }};
 }
 
 .btn-social {
@@ -499,33 +461,24 @@ footer .footer-below {
     width: 1px;
     height: 75px;
     margin-left: 35px;
-    background-color: #{{ site.color.secondary }
-}
-
-;
--webkit-transform: rotate(45deg);
--ms-transform: rotate(45deg);
-transform: rotate(45deg);
+    background-color: #{{ site.color.secondary }};
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .portfolio-modal .close-modal .lr .rl {
     z-index: 1052;
     width: 1px;
     height: 75px;
-    background-color: #{{ site.color.secondary }
-}
-
-;
--webkit-transform: rotate(90deg);
--ms-transform: rotate(90deg);
-transform: rotate(90deg);
+    background-color: #{{ site.color.secondary }};
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .navbar-nav>.active>a {
-    background-color: #{{ site.color.secondary-dark }
-}
-
-!important;
+    background-color: #{{ site.color.secondary-dark }} !important;
 }
 
 /* Fix modal mouse wheel issues */
