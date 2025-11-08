@@ -22,6 +22,14 @@
     apply(sel.value);
   }
 
-  wireFilter('areaFilter-und',  'grid-und');
-  wireFilter('areaFilter-grad', 'grid-grad');
+  // Aguarda DOM pronto para garantir que os elementos existem
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      wireFilter('areaFilter-und',  'grid-und');
+      wireFilter('areaFilter-grad', 'grid-grad');
+    });
+  } else {
+    wireFilter('areaFilter-und',  'grid-und');
+    wireFilter('areaFilter-grad', 'grid-grad');
+  }
 })();
