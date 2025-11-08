@@ -1,7 +1,7 @@
 (function() {
     console.log('[filter] file loaded');   
   function wireFilter(selectId, gridId) {
-      console.log('[filter] wire', selectId, sectionId);
+      console.log('[filter] wire', selectId, gridId);
     var sel = document.getElementById(selectId);
     var grid = document.getElementById(gridId);
     if (!sel || !grid) return;
