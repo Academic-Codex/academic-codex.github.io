@@ -6,6 +6,15 @@
         <h2>Grad</h2>
         <hr class="star-primary">
       </div>
+        <!-- Dropdown da área (escopo: undergrad) -->
+        <select id="areaFilter-und" class="form-control" style="display:inline-block;max-width:260px;margin:8px 0 16px;">
+          <option value="all">Todas as áreas</option>
+          {% assign und_posts = site.posts | where: "category", "grad" %}
+          {% assign und_areas = und_posts | map: "area" | uniq | sort_natural %}
+          {% for a in und_areas %}
+            {% if a %}<option value="{{ a }}">{{ a | capitalize }}</option>{% endif %}
+          {% endfor %}
+        </select>
     </div>
     <div class="portfolio-flex-row">
       {% assign grad_posts = site.posts | where: "category", "grad" %}
