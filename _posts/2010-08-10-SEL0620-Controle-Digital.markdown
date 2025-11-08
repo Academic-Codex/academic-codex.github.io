@@ -1,12 +1,12 @@
 ---
-title: "SME0600 Cálculo Numérico"
-link: /SME0600-Calculo-Numerico
+title: "SEL0620 Controle Digital"
+link: /SEL0620-Controle-Digital
 category: undergrad
-area: matematica
+area: controle
 layout: default
-modal-id: 9
+modal-id: 10
 date: 2014-07-18
-img: calculo-numerico.png
+img: placeholder.jpg
 alt: image-alt
 project-date: April 2014
 client: Start Bootstrap
