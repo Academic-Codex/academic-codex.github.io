@@ -1,5 +1,6 @@
 (function() {
   function wireFilter(selectId, gridId) {
+    console.log("hi")
     var sel = document.getElementById(selectId);
     var grid = document.getElementById(gridId);
     if (!sel || !grid) return;
