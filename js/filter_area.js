@@ -1,9 +1,10 @@
 (function() {
     console.log('[filter] file loaded');   
   function wireFilter(selectId, gridId) {
+    console.log('[filter] wire', selectId, gridId);
     var sel = document.getElementById(selectId);
     var grid = document.getElementById(gridId);
-    console.log('[filter] wire', sel, grid);
+
     if (!sel || !grid) return;
 
     var items = Array.prototype.slice.call(grid.querySelectorAll('.portfolio-item'));
