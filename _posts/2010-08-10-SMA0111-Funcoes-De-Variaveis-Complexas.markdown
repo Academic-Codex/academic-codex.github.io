@@ -2,7 +2,7 @@
 title: "SMA0111 Funcoes De Variaveis Complexas"
 link: /SMA0111-Funcoes-De-Variaveis-Complexas
 category: undergrad
-area: metematica
+area: matematica
 layout: default
 modal-id: 10
 date: 2014-07-18
