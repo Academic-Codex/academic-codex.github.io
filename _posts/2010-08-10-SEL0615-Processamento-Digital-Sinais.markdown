@@ -2,7 +2,7 @@
 title: "SEL0615 Processamento Digital Sinais"
 link: /SEL0615-Processamento-Digital-Sinais
 category: undergrad
-area: comunicacao
+area: comunicação
 layout: default
 modal-id: 10
 date: 2014-07-18

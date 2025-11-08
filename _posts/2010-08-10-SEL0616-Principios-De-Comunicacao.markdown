@@ -2,7 +2,7 @@
 title: "SEL0616 Principios De Comunicacao"
 link: /SEL0616-Principios-De-Comunicacao
 category: undergrad
-area: comunicacao
+area: comunicação
 layout: default
 modal-id: 10
 date: 2014-07-18
