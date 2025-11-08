@@ -1,5 +1,6 @@
 ---
 title: "PGF5001 Mecânica Quântica"
+type: grad
 link: /PGF5001-Mecanica-Quantica
 layout: default
 modal-id: 2

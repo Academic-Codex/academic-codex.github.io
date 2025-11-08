@@ -1,5 +1,6 @@
 ---
 title: "PGF5005 Mecânica Clássica"
+type: grad
 link: /PGF5005-Mecanica-Classica
 layout: default
 modal-id: 1

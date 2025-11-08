@@ -3,12 +3,12 @@
   <div class="container portfolio-flex-grid">
     <div class="row">
       <div class="col-lg-12 text-center">
-        <h2>Grad</h2>
+        <h2>Undergrad</h2>
         <hr class="star-primary">
       </div>
     </div>
     <div class="portfolio-flex-row">
-      {% assign grad_posts = site.posts | where: "type", "grad" %}
+      {% assign grad_posts = site.posts | where: "type", "undergrad" %}
       {% for post in grad_posts %}
       <div class="portfolio-flex-item portfolio-item">
         <div class="card-title text-center">{{ post.title }}</div>

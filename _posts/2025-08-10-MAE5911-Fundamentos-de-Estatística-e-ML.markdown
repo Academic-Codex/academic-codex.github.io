@@ -1,5 +1,6 @@
 ---
 title: "MAE5911 Estatística e Machine Learning"
+type: grad
 link: /MAE5911-Estatistica-e-Machine-Learning
 layout: default
 modal-id: 3

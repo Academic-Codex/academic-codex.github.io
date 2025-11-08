@@ -1,5 +1,6 @@
 ---
 title: "MAC5921 Deep Learning"
+type: grad
 link: /MAC5921-Deep-Learning
 layout: default
 modal-id: 4

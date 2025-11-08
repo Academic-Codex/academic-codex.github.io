@@ -1,5 +1,6 @@
 ---
 title: "MAT5730 Álgebra Linear"
+type: grad
 link: /MAT5730-Algebra-Linear
 layout: default
 modal-id: 5
