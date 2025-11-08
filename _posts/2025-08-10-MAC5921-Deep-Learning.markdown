@@ -1,4 +1,5 @@
 ---
+title: "MAC5921 Deep Learning"
 layout: default
 modal-id: 4
 date: 2014-07-15

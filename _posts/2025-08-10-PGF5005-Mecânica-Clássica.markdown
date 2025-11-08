@@ -1,4 +1,5 @@
 ---
+title: "PGF5005 Mecânica Clássica"
 layout: default
 modal-id: 1
 date: 2014-07-18
