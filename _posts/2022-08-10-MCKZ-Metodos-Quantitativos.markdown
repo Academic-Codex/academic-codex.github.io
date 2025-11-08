@@ -1,7 +1,7 @@
 ---
 title: "MCKZ Métodos Quantitativos"
-category: grad
 link: /MCKZ-Metodos-Quantitativos
+category: grad
 layout: default
 modal-id: 1
 date: 2014-07-18

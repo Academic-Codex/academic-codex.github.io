@@ -1,7 +1,7 @@
 ---
 title: "MAT5730 Álgebra Linear"
-category: grad
 link: /MAT5730-Algebra-Linear
+category: grad
 layout: default
 modal-id: 5
 date: 2014-07-14

@@ -1,7 +1,7 @@
 ---
 title: "SCE0611 Engenharia de Software"
-category: undergrad
 link: /SCE0611-Engenharia-de-Software
+category: undergrad
 layout: default
 modal-id: 1
 date: 2014-07-18

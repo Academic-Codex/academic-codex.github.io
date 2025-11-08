@@ -1,7 +1,7 @@
 ---
 title: "MAC5722 Complexidade Computacional"
-category: grad
 link: /MAC5722-Complexidade-Computacional
+category: grad
 layout: default
 modal-id: 6
 date: 2014-07-15
