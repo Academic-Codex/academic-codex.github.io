@@ -2,7 +2,7 @@
 title: "SEL0617 Fundamentos Microeletronica"
 link: /SEL0617-Fundamentos-Microeletronica
 category: undergrad
-area: eletronica
+area: eletrônica
 layout: default
 modal-id: 10
 date: 2014-07-18

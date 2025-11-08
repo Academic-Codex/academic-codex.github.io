@@ -2,7 +2,7 @@
 title: "SEL0606 Laboratorio Sistemas Digitais"
 link: /SEL0606-Laboratorio-Sistemas-Digitais
 category: undergrad
-area: eletronica
+area: eletrônica
 layout: default
 modal-id: 10
 date: 2014-07-18

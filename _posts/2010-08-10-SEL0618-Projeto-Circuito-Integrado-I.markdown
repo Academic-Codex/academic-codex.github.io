@@ -2,7 +2,7 @@
 title: "SEL0618 Projeto Circuito Integrado I"
 link: /SEL0618-Projeto-Circuito-Integrado-I
 category: undergrad
-area: eletronica
+area: eletrônica
 layout: default
 modal-id: 10
 date: 2014-07-18

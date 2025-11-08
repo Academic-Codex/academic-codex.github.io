@@ -2,7 +2,7 @@
 title: "SEL0615 Circuitos Eletronicos II"
 link: /SEL0615-Circuitos-Eletronicos-II
 category: undergrad
-area: eletronica
+area: eletrônica
 layout: default
 modal-id: 10
 date: 2014-07-18

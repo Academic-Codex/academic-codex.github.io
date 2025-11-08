@@ -2,7 +2,7 @@
 title: "SEL0614 Microprocessadores"
 link: /SEL0614-Microprocessadores
 category: undergrad
-area: eletronica
+area: eletrônica
 layout: default
 modal-id: 10
 date: 2014-07-18
