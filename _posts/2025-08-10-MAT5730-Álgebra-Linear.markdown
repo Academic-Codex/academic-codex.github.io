@@ -1,5 +1,6 @@
 ---
 title: "MAT5730 Álgebra Linear"
+link: /MAT5730-Algebra-Linear
 layout: default
 modal-id: 5
 date: 2014-07-14

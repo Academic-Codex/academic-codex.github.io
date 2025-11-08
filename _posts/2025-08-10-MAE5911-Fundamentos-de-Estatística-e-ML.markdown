@@ -1,5 +1,6 @@
 ---
-title: "MAE5911 Fundamentos de Estatística e ML"
+title: "MAE5911 Estatística e Machine Learning"
+link: /MAE5911-Estatistica-e-Machine-Learning
 layout: default
 modal-id: 3
 date: 2014-07-16
