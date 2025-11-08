@@ -2,7 +2,7 @@
 title: "SCE0614 Inteligencia Artificial"
 link: /SCE0614-Inteligencia-Artificial
 category: undergrad
-area: inteligencia artificial
+area: inteligência artificial
 layout: default
 modal-id: 10
 date: 2014-07-18
