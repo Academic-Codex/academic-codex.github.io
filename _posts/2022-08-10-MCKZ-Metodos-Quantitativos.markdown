@@ -1,13 +1,14 @@
 ---
-title: "MAE5911 Estatística e Machine Learning"
+title: "MCKZ Métodos Quantitativos"
 category: grad
-link: /MAE5911-Estatistica-e-Machine-Learning
+link: /MCKZ-Metodos-Quantitativos
 layout: default
-modal-id: 3
-date: 2014-07-16
-img: estatistica.jpg
+modal-id: 1
+date: 2014-07-18
+img: metodos-quantitativos.png
 alt: image-alt
 project-date: April 2014
 client: Start Bootstrap
+category: Web Development
 description: Use this area of the page to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.
 ---

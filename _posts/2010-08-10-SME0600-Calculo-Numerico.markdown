@@ -1,11 +1,11 @@
 ---
-title: "MAE5911 Estatística e Machine Learning"
-category: grad
-link: /MAE5911-Estatistica-e-Machine-Learning
+title: "SME0600 Cálculo Numérico"
+link: /SME0600-Calculo-Numerico
+category: undergrad
 layout: default
-modal-id: 3
-date: 2014-07-16
-img: estatistica.jpg
+modal-id: 1
+date: 2014-07-18
+img: calculo-numerico.png
 alt: image-alt
 project-date: April 2014
 client: Start Bootstrap

@@ -1,13 +1,14 @@
 ---
-title: "MAE5911 Estatística e Machine Learning"
-category: grad
-link: /MAE5911-Estatistica-e-Machine-Learning
+title: "PGF5005 Mecânica Clássica"
+category: undergrad
+link: /SSC0748-Redes-Moveis
 layout: default
-modal-id: 3
-date: 2014-07-16
-img: estatistica.jpg
+modal-id: 1
+date: 2014-07-18
+img: redes-moveis.jpg
 alt: image-alt
 project-date: April 2014
 client: Start Bootstrap
+category: Web Development
 description: Use this area of the page to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.
 ---

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="portfolio-flex-row">
-      {% assign grad_posts = site.posts | where: "type", "grad" %}
+      {% assign grad_posts = site.posts | where: "category", "grad" %}
       {% for post in grad_posts %}
       <div class="portfolio-flex-item portfolio-item">
         <div class="card-title text-center">{{ post.title }}</div>
