@@ -20,11 +20,10 @@
     <div class="portfolio-flex-row" id="grid-grad">
       {% assign grad_posts = site.posts | where: "category", "grad" %}
       {% for post in grad_posts %}
-      <div class="portfolio-flex-item portfolio-item">
-        data-area="{{ post.area | slugify }}">
+      <div class="portfolio-flex-item portfolio-item" data-area="{{ post.area | slugify }}">
         <div class="card-title text-center">{{ post.title }}</div>
         {% if post.link %}
-        <a href="{{ post.link | relative_url }}" class="portfolio-link" target="_blank" rel="noopener">
+         <a href="{{ post.link | relative_url }}" class="portfolio-link" target="_blank" rel="noopener">
           {% else %}
           <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
             {% endif %}
