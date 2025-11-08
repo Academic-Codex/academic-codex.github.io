@@ -7,7 +7,9 @@
         <hr class="star-primary">
       </div>
       <!-- Dropdown da área (escopo: undergrad) -->
-        <select id="areaFilter-und" class="form-control" style="display:inline-block;max-width:260px;margin:8px 0 16px;">
+        <!-- Dropdown da área (escopo: undergrad) -->
+        <select id="areaFilter-und" class="form-control"
+                style="display:inline-block;max-width:260px;margin:8px 0 16px;">
           <option value="all">Todas as áreas</option>
           {% assign und_posts = site.posts | where: "category", "undergrad" %}
           {% assign und_areas = und_posts | map: "area" | uniq | sort_natural %}
