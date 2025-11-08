@@ -18,7 +18,7 @@
           {% endfor %}
         </select>
     </div>
-    <div class="portfolio-flex-row">
+    <div class="portfolio-flex-row" id="grid-und">
       {% assign grad_posts = site.posts | where: "category", "undergrad" %}
       {% for post in grad_posts %}
       <div class="portfolio-flex-item portfolio-item">
