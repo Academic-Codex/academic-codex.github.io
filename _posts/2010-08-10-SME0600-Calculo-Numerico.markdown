@@ -2,6 +2,7 @@
 title: "SME0600 Cálculo Numérico"
 link: /SME0600-Calculo-Numerico
 category: undergrad
+area: matematica
 layout: default
 modal-id: 1
 date: 2014-07-18

@@ -2,6 +2,7 @@
 title: "SSC0748 Redes Móveis"
 link: /SSC0748-Redes-Moveis
 category: undergrad
+area: comunicacao
 layout: default
 modal-id: 1
 date: 2014-07-18

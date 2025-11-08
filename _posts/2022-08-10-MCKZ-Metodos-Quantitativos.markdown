@@ -2,6 +2,7 @@
 title: "MCKZ Métodos Quantitativos"
 link: /MCKZ-Metodos-Quantitativos
 category: grad
+area: matematica
 layout: default
 modal-id: 1
 date: 2014-07-18
