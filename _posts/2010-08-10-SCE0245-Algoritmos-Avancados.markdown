@@ -1,5 +1,5 @@
 ---
-title: "SCE0245 Algoritmos Avancados"
+title: "SCE0245 Algorítmos Avançados"
 link: /SCE0245-Algoritmos-Avancados
 category: undergrad
 area: software

@@ -1,5 +1,5 @@
 ---
-title: "SEP0527 Gestao e Organizacao"
+title: "SEP0527 Gestão e Organização"
 link: /SEP0527-Gestao-e-Organizacao
 category: undergrad
 area: empreendedorismo

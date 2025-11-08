@@ -1,5 +1,5 @@
 ---
-title: "SCE0614 Inteligencia Artificial"
+title: "SCE0614 Inteligência Artificial"
 link: /SCE0614-Inteligencia-Artificial
 category: undergrad
 area: inteligência artificial

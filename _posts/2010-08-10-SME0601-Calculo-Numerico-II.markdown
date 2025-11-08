@@ -1,5 +1,5 @@
 ---
-title: "SME0601 Calculo Numerico II"
+title: "SME0601 Cálculo Numérico II"
 link: /SME0601-Calculo-Numerico-II
 category: undergrad
 area: matematica

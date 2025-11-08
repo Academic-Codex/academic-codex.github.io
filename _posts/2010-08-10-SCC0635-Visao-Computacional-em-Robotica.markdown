@@ -1,5 +1,5 @@
 ---
-title: "SCC0635 Visao Computacional em Robotica"
+title: "SCC0635 Visão Computacional em Robótica"
 link: /SCC0635-Visao-Computacional-em-Robotica
 category: undergrad
 area: inteligência artificial

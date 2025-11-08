@@ -1,5 +1,5 @@
 ---
-title: "FFI0181 Laboratorio de Fisica II"
+title: "FFI0181 Laboratório de Fisica II"
 link: /FFI0181-Laboratorio-de-Fisica-II
 category: undergrad
 area: fisica

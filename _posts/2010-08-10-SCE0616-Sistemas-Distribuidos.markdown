@@ -1,5 +1,5 @@
 ---
-title: "SCE0616 Sistemas Distribuidos"
+title: "SCE0616 Sistemas Distríbuidos"
 link: /SCE0616-Sistemas-Distribuidos
 category: undergrad
 area: computacao

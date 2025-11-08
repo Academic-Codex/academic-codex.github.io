@@ -1,5 +1,5 @@
 ---
-title: "SEL0616 Principios De Comunicacao"
+title: "SEL0616 Princípios De Comunicação"
 link: /SEL0616-Principios-De-Comunicacao
 category: undergrad
 area: comunicação

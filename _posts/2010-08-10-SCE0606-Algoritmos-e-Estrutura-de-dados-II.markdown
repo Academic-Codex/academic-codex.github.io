@@ -1,5 +1,5 @@
 ---
-title: "SCE0606 Algoritmos e Estrutura de dados II"
+title: "SCE0606 Algorítmos e Estrutura de dados II"
 link: /SCE0606-Algoritmos-e-Estrutura-de-dados-II
 category: undergrad
 area: software

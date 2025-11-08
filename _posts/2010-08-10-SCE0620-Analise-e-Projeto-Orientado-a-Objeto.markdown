@@ -1,5 +1,5 @@
 ---
-title: "SCE0620 Analise e Projeto Orientado a Objeto"
+title: "SCE0620 Análise e Projeto Orientado a Objeto"
 link: /SCE0620-Analise-e-Projeto-Orientado-a-Objeto
 category: undergrad
 area: software

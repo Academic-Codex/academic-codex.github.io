@@ -1,5 +1,5 @@
 ---
-title: "SCE0603 Algoritmos e Estrutura De Dados I"
+title: "SCE0603 Algorítmos e Estrutura De Dados I"
 link: /SCE0603-Algoritmos-e-Estrutura-De-Dados-I
 category: undergrad
 area: software

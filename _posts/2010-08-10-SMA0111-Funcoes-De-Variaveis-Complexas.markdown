@@ -1,5 +1,5 @@
 ---
-title: "SMA0111 Funcoes De Variaveis Complexas"
+title: "SMA0111 Funções De Variáveis Complexas"
 link: /SMA0111-Funcoes-De-Variaveis-Complexas
 category: undergrad
 area: matematica

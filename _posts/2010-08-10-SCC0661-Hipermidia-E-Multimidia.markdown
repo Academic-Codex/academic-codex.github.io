@@ -1,5 +1,5 @@
 ---
-title: "SCC0661 Hipermidia E Multimidia"
+title: "SCC0661 Hipermídia E Multimídia"
 link: /SCC0661-Hipermidia-E-Multimidia
 category: undergrad
 area: software

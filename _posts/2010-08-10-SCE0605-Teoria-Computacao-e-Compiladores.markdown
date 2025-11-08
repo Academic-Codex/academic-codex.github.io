@@ -1,5 +1,5 @@
 ---
-title: "SCE0605 Teoria Computacao e Compiladores"
+title: "SCE0605 Teoria Computação e Compiladores"
 link: /SCE0605-Teoria-Computacao-e-Compiladores
 category: undergrad
 area: computacao

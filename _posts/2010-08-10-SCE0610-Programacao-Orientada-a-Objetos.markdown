@@ -1,5 +1,5 @@
 ---
-title: "SCE0610 Programacao Orientada a Objetos"
+title: "SCE0610 Programação Orientada a Objetos"
 link: /SCE0610-Programacao-Orientada-a-Objetos
 category: undergrad
 area: software

@@ -1,5 +1,5 @@
 ---
-title: "SME0610 Programacao Matematica"
+title: "SME0610 Programação Matemática"
 link: /SME0610-Programacao-Matematica
 category: undergrad
 area: software

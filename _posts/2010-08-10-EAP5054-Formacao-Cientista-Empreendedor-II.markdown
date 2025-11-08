@@ -1,5 +1,5 @@
 ---
-title: "EAP5054 Formacao Cientista Empreendedor II"
+title: "EAP5054 Formação Do Cientista Empreendedor II"
 link: /EAP5054-Formacao-Cientista-Empreendedor-II
 category: grad
 area: empreendedorismo

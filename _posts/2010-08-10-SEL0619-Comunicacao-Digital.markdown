@@ -1,5 +1,5 @@
 ---
-title: "SEL0619 Comunicacao Digital"
+title: "SEL0619 Comunicação Digital"
 link: /SEL0619-Comunicacao-Digital
 category: undergrad
 area: comunicação

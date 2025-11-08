@@ -1,5 +1,5 @@
 ---
-title: "SMA Calculo II"
+title: "SMA Cálculo II"
 link: /SMA-Calculo-II
 category: undergrad
 area: matematica

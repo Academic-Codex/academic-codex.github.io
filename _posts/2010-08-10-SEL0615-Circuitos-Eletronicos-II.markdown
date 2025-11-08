@@ -1,5 +1,5 @@
 ---
-title: "SEL0615 Circuitos Eletronicos II"
+title: "SEL0615 Circuitos Eletrônicos II"
 link: /SEL0615-Circuitos-Eletronicos-II
 category: undergrad
 area: eletrônica

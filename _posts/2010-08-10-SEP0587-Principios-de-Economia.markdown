@@ -1,5 +1,5 @@
 ---
-title: "SEP0587 Principios de Economia"
+title: "SEP0587 Princípios de Economia"
 link: /SEP0587-Principios-de-Economia
 category: undergrad
 area: empreendedorismo

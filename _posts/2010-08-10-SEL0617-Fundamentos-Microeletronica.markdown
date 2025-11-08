@@ -1,5 +1,5 @@
 ---
-title: "SEL0617 Fundamentos Microeletronica"
+title: "SEL0617 Fundamentos Microeletrônica"
 link: /SEL0617-Fundamentos-Microeletronica
 category: undergrad
 area: eletrônica

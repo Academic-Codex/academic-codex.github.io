@@ -1,5 +1,5 @@
 ---
-title: "SEP0527 Gestao Ambiental"
+title: "SEP0527 Gestão Ambiental"
 link: /SEP0527-Gestao-Ambiental
 category: undergrad
 area: empreendedorismo

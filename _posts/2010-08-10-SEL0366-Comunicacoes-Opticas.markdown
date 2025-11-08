@@ -1,5 +1,5 @@
 ---
-title: "SEL0366-Comunicacoes-Opticas"
+title: "SEL0366 Comunicações Ópticas"
 link: /SEL0366 Comunicacoes Opticas
 category: undergrad
 area: comunicação

@@ -1,5 +1,5 @@
 ---
-title: "DPG5011 Formacao Do Cientista Empreendedor"
+title: "DPG5011 Formação Do Cientista Empreendedor"
 link: /DPG5011-Formacao-Do-Cientista-Empreendedor
 category: grad
 area: empreendedorismo

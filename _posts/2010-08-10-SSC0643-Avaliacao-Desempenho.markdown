@@ -1,5 +1,5 @@
 ---
-title: "SSC0643 Avaliacao Desempenho"
+title: "SSC0643 Avaliação Desempenho"
 link: /SSC0643-Avaliacao-Desempenho
 category: undergrad
 area: software

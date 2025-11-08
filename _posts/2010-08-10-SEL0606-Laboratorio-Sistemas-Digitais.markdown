@@ -1,5 +1,5 @@
 ---
-title: "SEL0606 Laboratorio Sistemas Digitais"
+title: "SEL0606 Laboratório de Sistemas Digitais"
 link: /SEL0606-Laboratorio-Sistemas-Digitais
 category: undergrad
 area: eletrônica

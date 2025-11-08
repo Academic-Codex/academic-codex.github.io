@@ -1,5 +1,5 @@
 ---
-title: "SEL0607 Organizacao De Computadores"
+title: "SEL0607 Organização De Computadores"
 link: /SEL0607-Organizacao-De-Computadores
 category: undergrad
 area: computacao

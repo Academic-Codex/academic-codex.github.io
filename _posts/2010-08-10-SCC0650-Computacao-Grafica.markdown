@@ -1,5 +1,5 @@
 ---
-title: "SCC0650 Computacao Grafica"
+title: "SCC0650 Computação Gráfica"
 link: /SCC0650-Computacao-Grafica
 category: undergrad
 area: software
