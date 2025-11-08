@@ -11,21 +11,33 @@
       {% for post in site.posts %}
       <div class="portfolio-flex-item portfolio-item">
         <div class="card-title text-center">{{ post.title }}</div>
-        <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
+        {% if post.link %}
+        <a href="{{ post.link | relative_url }}" class="portfolio-link" target="_blank" rel="noopener">
+          {% else %}
+          <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
+            {% endif %}
+            <div class="thumb">
+              <img src="img/portfolio/{{ post.img }}" alt="{{ post.alt | default: post.title }}">
+              <div class="caption" aria-hidden="true">
+                <div class="caption-content"><i class="fa fa-search-plus fa-3x"></i></div>
+              </div>
+            </div>
+          </a>
+        <!-- <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
           <div class="caption">
             <div class="caption-content">
               <i class="fa fa-search-plus fa-3x"></i>
             </div>
           </div>
           <img src="img/portfolio/{{ post.img }}" class="img-responsive" alt="{{ post.alt }}">
-        </a>
+        </a> -->
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<section id="portfolio">
+<!-- <section id="portfolio">
   <div class="container portfolio-flex-grid">
     <div class="portfolio-flex-row text-center">
       {% for post in site.posts %}
@@ -47,4 +59,4 @@
       {% endfor %}
     </div>
   </div>
-</section>
+</section> -->
