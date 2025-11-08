@@ -1,5 +1,5 @@
 ---
-title: "PGF5005 Mecânica Clássica"
+title: "SSC0748 Redes Móveis"
 category: undergrad
 link: /SSC0748-Redes-Moveis
 layout: default
