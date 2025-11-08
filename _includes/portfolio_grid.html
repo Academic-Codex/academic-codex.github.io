@@ -1,4 +1,4 @@
-<!-- Portfolio Grid Section
+<!-- Portfolio Grid Section -->
 <section id="portfolio">
   <div class="container portfolio-flex-grid">
     <div class="row">
@@ -10,6 +10,7 @@
     <div class="portfolio-flex-row">
       {% for post in site.posts %}
       <div class="portfolio-flex-item portfolio-item">
+        <div class="card-title text-center">{{ post.title }}</div>
         <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
           <div class="caption">
             <div class="caption-content">
@@ -22,7 +23,7 @@
       {% endfor %}
     </div>
   </div>
-</section> -->
+</section>
 
 <section id="portfolio">
   <div class="container portfolio-flex-grid">
