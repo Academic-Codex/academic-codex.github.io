@@ -502,3 +502,12 @@ footer .footer-below {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
+
+.card-title {
+  text-transform: none !important;
+  font-family: inherit;
+  font-weight: 600;      /* ou 700 se quiser manter o mesmo peso da navbar */
+  font-size: 1.3em;      /* ajuste conforme o visual desejado */
+  margin-bottom: 10px;   /* separação do card */
+  color: #2c3e50;        /* mesma cor que o resto do tema */
+}
