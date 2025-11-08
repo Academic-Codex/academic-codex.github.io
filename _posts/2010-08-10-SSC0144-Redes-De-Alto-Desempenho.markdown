@@ -6,7 +6,7 @@ area: comunicação
 layout: default
 modal-id: 10
 date: 2014-07-18
-img: placeholder.jpg
+img: redes-alto-desempenho.png
 alt: image-alt
 project-date: April 2014
 client: Start Bootstrap
