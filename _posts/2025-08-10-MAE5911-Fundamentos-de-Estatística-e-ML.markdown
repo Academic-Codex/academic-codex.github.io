@@ -4,7 +4,7 @@ link: /MAE5911-Estatistica-e-Machine-Learning
 category: grad
 area: matematica
 layout: default
-modal-id: 3
+modal-id: 4
 date: 2014-07-16
 img: estatistica.jpg
 alt: image-alt

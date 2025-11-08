@@ -4,7 +4,7 @@ link: /SSC0748-Redes-Moveis
 category: undergrad
 area: comunicacao
 layout: default
-modal-id: 1
+modal-id: 8
 date: 2014-07-18
 img: redes-moveis.jpg
 alt: image-alt

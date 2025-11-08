@@ -4,7 +4,7 @@ link: /SME0600-Calculo-Numerico
 category: undergrad
 area: matematica
 layout: default
-modal-id: 1
+modal-id: 9
 date: 2014-07-18
 img: calculo-numerico.png
 alt: image-alt
