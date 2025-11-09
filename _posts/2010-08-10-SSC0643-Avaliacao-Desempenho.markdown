@@ -6,7 +6,7 @@ area: software
 layout: default
 modal-id: 10
 date: 2014-07-18
-img: avaliacao-desempenho.jpg
+img: avaliacao-de-desempenho.png
 alt: image-alt
 description:
 ---
