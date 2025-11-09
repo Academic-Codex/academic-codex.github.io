@@ -3,7 +3,7 @@ name: Build & Deploy Jekyll (optimized + WebP)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,6 @@ jobs:
       - name: Build Jekyll site
         run: bundle exec jekyll build
 
-      # ---------- Otimização e WebP ----------
       - name: Install image optimization tools
         run: |
           sudo apt-get update
@@ -46,10 +45,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          find _site -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -print0 \
-            | xargs -0 -I{} jpegoptim --strip-all --max=75 "{}" || true
-          find _site -type f -iname "*.png" -print0 \
-            | xargs -0 -I{} pngquant --quality=65-80 --force --ext .png "{}" || true
+          find _site -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) \ 
+          -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 "{}" || true
+          find _site -type f -iname "*.png" -print0 | xargs -0 -I{} \
+           pngquant --quality=65-80 --force --ext .png "{}" || true
 
       - name: Generate WebP versions
         shell: bash
@@ -63,36 +62,32 @@ jobs:
         shell: bash
         run: |
           python3 - <<'PY'
-import re, pathlib
+          import re, pathlib
 
-root = pathlib.Path("_site")
-img_re = re.compile(r'<img\s+([^>]*?)src="([^"]+\.(?:jpe?g|png))"([^>]*)>', re.I)
+          root = pathlib.Path("_site")
+          img_re = re.compile(r'<img\s+([^>]*?)src="([^"]+\.(?:jpe?g|png))"([^>]*)>', re.I)
 
-def repl(m):
-    pre = m.group(1).strip()
-    src = m.group(2)
-    post = m.group(3).strip()
-    webp = re.sub(r'\.(jpe?g|png)$', '.webp', src, flags=re.I)
+          def repl(m):
+              pre = m.group(1).strip()
+              src = m.group(2)
+              post = m.group(3).strip()
+              webp = re.sub(r'\.(jpe?g|png)$', '.webp', src, flags=re.I)
+              before = (pre + " ").strip()
+              after = (" " + post).strip() if post else ""
+              combo = (pre + post).lower()
+              if "loading=" not in combo:
+                  after += ' loading="lazy"'
+              if "decoding=" not in combo:
+                  after += ' decoding="async"'
+              return f'<picture><source srcset="{webp}" type="image/webp"><img {before}src="{src}"{after}></picture>'
 
-    before = (pre + " ").strip()
-    after  = (" " + post).strip() if post else ""
+              for p in root.rglob("*.html"):
+                  txt = p.read_text(encoding="utf-8", errors="ignore")
+                  new = img_re.sub(repl, txt)
+                  if new != txt:
+                      p.write_text(new, encoding="utf-8")
+              PY
 
-    combo = (pre + post).lower()
-    if "loading=" not in combo:
-        after += ' loading="lazy"'
-    if "decoding=" not in combo:
-        after += ' decoding="async"'
-
-    return f'<picture><source srcset="{webp}" type="image/webp"><img {before}src="{src}"{after}></picture>'
-
-for p in root.rglob("*.html"):
-    txt = p.read_text(encoding="utf-8", errors="ignore")
-    new = img_re.sub(repl, txt)
-    if new != txt:
-        p.write_text(new, encoding="utf-8")
-PY
-
-      # ---------- Deploy to Pages ----------
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
