@@ -6,7 +6,7 @@ area: comunicação
 layout: default
 modal-id: 10
 date: 2014-07-18
-img: processamento-digital-de-sinais.png
+img: processamento-digital-sinais.png
 alt: image-alt
 description:
 ---
