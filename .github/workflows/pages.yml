@@ -45,9 +45,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          find _site -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) \ 
-          -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 "{}" || true
-          find _site -type f -iname "*.png" -print0 | xargs -0 -I{} \
+          find _site -type f \( -iname '*.jpg' -o -iname '*.jpeg' \) \ 
+          -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 '{}' || true
+          find _site -type f -iname '*.png' -print0 | xargs -0 -I{} \
            pngquant --quality=65-80 --force --ext .png "{}" || true
 
       - name: Generate WebP versions
@@ -55,8 +55,8 @@ jobs:
         run: |
           set -euo pipefail
           while IFS= read -r -d '' f; do
-            cwebp -q 70 -mt "$f" -o "${f%.*}.webp"
-          done < <(find _site -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -print0)
+            cwebp -q 70 -mt '$f' -o '${f%.*}.webp'
+          done < <(find _site -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0)
 
       - name: Rebuild HTML to use <picture> with WebP + lazy loading
         shell: bash
