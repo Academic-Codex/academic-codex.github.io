@@ -252,26 +252,31 @@ section.success {
     }
 }
 
+:root{
+  --grid-gap: 24px;     /* ajuste aqui se quiser mais/menos espaço */
+  --grid-pad-x: 24px;   /* padding horizontal do grid */
+}
+
+
 /* Flexbox Portfolio Grid */
 @media (min-width: 640px) {
     .portfolio-flex-grid .portfolio-flex-row {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: stretch;
-      justify-content: flex-start;
-      gap: 24px;                     /* espaçamento uniforme entre cards */
-      padding: 16px 24px;            /* “respiro” interno (vertical e horizontal) */
-      box-sizing: border-box; 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: var(--grid-gap);
+  padding: 16px var(--grid-pad-x);
+  box-sizing: border-box;
     }
     .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
-      flex: 1 0 55%;
-      max-width: 55%;
+    flex: 0 1 calc((100% - var(--grid-gap)) / 2);
+    max-width: calc((100% - var(--grid-gap)) / 2);
     }
   }
   @media (min-width: 960px) {
     .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
-      flex: 1 0 32%;
-      max-width: 32%;
+    flex: 0 1 calc((100% - (2 * var(--grid-gap))) / 3);
+    max-width: calc((100% - (2 * var(--grid-gap))) / 3);
     }
   }
   /* A large grid might need four columns on widescreen layouts */
