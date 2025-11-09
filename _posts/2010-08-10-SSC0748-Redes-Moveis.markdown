@@ -6,7 +6,7 @@ area: comunicação
 layout: default
 modal-id: 8
 date: 2014-07-18
-img: redes-moveis.jpg
+img: redes-moveis.png
 alt: image-alt
 project-date: April 2014
 description:
