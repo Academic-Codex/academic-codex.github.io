@@ -62,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           while IFS= read -r -d '' f; do
-            cwebp -q 70 -mt '$f' -o '${f%.*}.webp'
+            cwebp -q 70 -mt "$f" -o "${f%.*}.webp"
           done < <(find _site -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0)
 
       - name: Rebuild HTML to use <picture> with WebP + lazy loading
