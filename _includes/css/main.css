@@ -259,6 +259,9 @@ section.success {
       flex-flow: row wrap;
       align-items: stretch;
       justify-content: flex-start;
+      gap: 24px;                     /* espaçamento uniforme entre cards */
+      padding: 16px 24px;            /* “respiro” interno (vertical e horizontal) */
+      box-sizing: border-box; 
     }
     .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
       flex: 1 0 49%;
