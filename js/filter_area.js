@@ -1,26 +1,32 @@
-(function() {
-    console.log('[filter] file loaded');   
-  function wireFilter(selectId, gridId) {
-    console.log('[filter] wire', selectId, gridId);
-    var sel = document.getElementById(selectId);
-    var grid = document.getElementById(gridId);
+(function () {
+  // Função que normaliza strings (remove acentos, espaços e pontuação)
+  function norm(s){
+    return (s || "")
+      .toString()
+      .normalize("NFD")              // separa acentos em caracteres combinantes
+      .replace(/[\u0300-\u036f]/g,"")// remove os acentos
+      .trim()
+      .toLowerCase()
+      .replace(/[^\w]+/g,"-")        // espaços/pontuação -> '-'
+      .replace(/-+/g,"-");           // remove hífens duplicados
+  }
 
+  function wireFilter(selectId, gridId) {
+    const sel  = document.getElementById(selectId);
+    const grid = document.getElementById(gridId);
     if (!sel || !grid) return;
 
-    var items = Array.prototype.slice.call(grid.querySelectorAll('.portfolio-item'));
+    const items = Array.from(grid.querySelectorAll('.portfolio-item'));
 
-    function apply(area) {
-      area = (area || 'all').toLowerCase();
-      items.forEach(function(el){
-        var a = (el.getAttribute('data-area') || '').toLowerCase();
-        el.style.display = (area === 'all' || a === area) ? '' : 'none';
+    function apply(val) {
+      const want = norm(val);
+      items.forEach(el => {
+        const tag = norm(el.dataset.area || ""); // normaliza também o atributo
+        el.style.display = (want === "all" || tag === want) ? "" : "none";
       });
     }
 
-    sel.addEventListener('change', function(){
-      apply(this.value);
-    });
-
+    sel.addEventListener('change', () => apply(sel.value));
     apply(sel.value);
   }
 
