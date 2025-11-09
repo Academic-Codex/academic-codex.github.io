@@ -65,6 +65,14 @@ jobs:
             cwebp -q 70 -mt "$f" -o "${f%.*}.webp"
           done < <(find _site -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0)
 
+      - name: Verificar imagens WebP geradas
+        shell: bash
+        run: |
+          echo "=== Arquivos WebP encontrados ==="
+          find _site -type f -name "*.webp" | head -n 30 || echo "Nenhum arquivo .webp encontrado."
+          echo "=== Contagem total ==="
+          find _site -type f -name "*.webp" | wc -l
+
       - name: Rebuild HTML to use <picture> with WebP + lazy loading
         shell: bash
         run: |
