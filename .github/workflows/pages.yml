@@ -1,0 +1,111 @@
+name: Build & Deploy Jekyll (optimized + WebP)
+
+on:
+  push:
+    branches: [ main ]    # troque se seu branch principal for outro
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby for Jekyll
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Jekyll and dependencies
+        run: |
+          gem install bundler jekyll
+          bundle install
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build   # saída padrão: _site/
+
+      # ---------- Otimização e WebP ----------
+
+      - name: Install image optimization tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick webp jpegoptim pngquant
+
+      - name: Optimize JPG and PNG in _site
+        run: |
+          set -e
+          find _site -type f -iname "*.jpg"  -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 "{}" || true
+          find _site -type f -iname "*.jpeg" -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 "{}" || true
+          find _site -type f -iname "*.png"  -print0 | xargs -0 -I{} pngquant --quality=65-80 --force --ext .png "{}" || true
+
+      - name: Generate WebP versions
+        run: |
+          set -e
+          while IFS= read -r -d '' f; do
+            out="${f%.*}.webp"
+            cwebp -q 70 -mt "$f" -o "$out"
+          done < <(find _site -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -print0)
+
+      - name: Rebuild HTML to use <picture> with WebP + lazy loading
+        run: |
+          python3 - << 'PY'
+import re, pathlib
+
+root = pathlib.Path("_site")
+img_re = re.compile(r'<img\s+([^>]*?)src="([^"]+\.(?:jpe?g|png))"([^>]*)>', re.IGNORECASE)
+
+def repl(m):
+    pre = m.group(1).strip()
+    src = m.group(2)
+    post = m.group(3).strip()
+    webp = re.sub(r'\.(jpe?g|png)$', '.webp', src, flags=re.IGNORECASE)
+
+    attrs_before = (pre + " ").strip()
+    attrs_after  = (" " + post).strip() if post else ""
+
+    combo = (pre + post).lower()
+    if "loading=" not in combo:
+        attrs_after += ' loading="lazy"'
+    if "decoding=" not in combo:
+        attrs_after += ' decoding="async"'
+
+    return (f'<picture>'
+            f'<source srcset="{webp}" type="image/webp">'
+            f'<img {attrs_before}src="{src}"{attrs_after}>'
+            f'</picture>')
+
+for html in root.rglob("*.html"):
+    txt = html.read_text(encoding="utf-8", errors="ignore")
+    new = img_re.sub(repl, txt)
+    if new != txt:
+        html.write_text(new, encoding="utf-8")
+PY
+
+      # ---------- Deploy to Pages ----------
+
+      - name: Upload artifact to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
