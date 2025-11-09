@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>{{TITLE}}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/paleta_cores.css" />
+  <link rel="stylesheet" href="./css/software.css" />
+  <link rel="stylesheet" href="./css/nav_bar.css" />
+  <link rel="stylesheet" href="./css/pages.css" />
+  <link rel="stylesheet" href="./css/home.css" />
+  <script src="./js/app.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="wrap">
+      <div class="brand"><a href="./index.html">Homepage</a></div>
+      <nav class="nav">
+        <a href="./research.html">Referências</a>
+        <a href="./software.html">Estudos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- HERO -->
+    <section class="hero" role="img" aria-label="Imagem temática do repositório">
+      <div class="hero__overlay"></div>
+      <div class="hero__content">
+        <h1 class="hero__title"> {{ TITLE_1 }} • {{ TITLE_2}} </h1>
+        <p class="hero__subtitle">
+         {{ SUBTITLE_1 }} . {{ SUBTITLE_2 }}
+        </p>
+        <a class="btn btn--light" href="./software.html">Estudos</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <h2>Sobre</h2>
+      <div class="card grid">
+        <div>
+          {{ ABOUT }}
+
+          <p class="muted">Last Updated at {{TIMESTAMP}} • Total de notebooks: <span id="nbcount">{{NBCOUNT}}</span></p>
+          <p>
+            <strong>Contact:</strong><br>
+            nara.moraes@usp.br ·
+            <a href="{{ GITHUB_LINK }}"
+              target="_blank">GitHub</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BIO -->
+    <section class="section">
+      <h3>Autora</h3>
+      <div class="card author">
+        <img id="avatar" class="avatar" alt="Foto da autora" />
+        <div>
+            {{ BIO }}
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+
+</html>

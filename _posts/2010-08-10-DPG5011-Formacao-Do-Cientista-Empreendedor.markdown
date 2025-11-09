@@ -6,7 +6,7 @@ area: empreendedorismo
 layout: default
 modal-id: 10
 date: 2014-07-18
-img: cientista-empreendedor.jpg
+img: cientista-empreendedor-i.png
 alt: image-alt
 description:
 ---
