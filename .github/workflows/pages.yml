@@ -42,13 +42,20 @@ jobs:
           sudo apt-get install -y webp jpegoptim pngquant
 
       - name: Optimize JPG and PNG in _site
-        shell: bash
         run: |
           set -euo pipefail
-          find _site -type f \( -iname '*.jpg' -o -iname '*.jpeg' \) \ 
-          -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 '{}' || true
-          find _site -type f -iname '*.png' -print0 | xargs -0 -I{} \
-           pngquant --quality=65-80 --force --ext .png '{}' || true
+
+          # JPEG (jpg)
+          find _site -type f -iname '*.jpg'  -print0 \
+            | xargs -0 -r -I{} jpegoptim --strip-all --max=75 "{}" || true
+
+          # JPEG (jpeg)
+          find _site -type f -iname '*.jpeg' -print0 \
+            | xargs -0 -r -I{} jpegoptim --strip-all --max=75 "{}" || true
+
+          # PNG
+          find _site -type f -iname '*.png'  -print0 \
+            | xargs -0 -r -I{} pngquant --quality=65-80 --force --ext .png "{}" || true
 
       - name: Generate WebP versions
         shell: bash
