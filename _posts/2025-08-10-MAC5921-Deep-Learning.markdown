@@ -2,7 +2,7 @@
 title: "MAC5921 Deep Learning"
 link: /MAC5921-Deep-Learning
 category: grad
-area: software
+area: inteligência artificial
 layout: default
 modal-id: 5
 date: 2014-07-15
