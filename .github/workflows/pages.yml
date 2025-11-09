@@ -48,7 +48,7 @@ jobs:
           find _site -type f \( -iname '*.jpg' -o -iname '*.jpeg' \) \ 
           -print0 | xargs -0 -I{} jpegoptim --strip-all --max=75 '{}' || true
           find _site -type f -iname '*.png' -print0 | xargs -0 -I{} \
-           pngquant --quality=65-80 --force --ext .png "{}" || true
+           pngquant --quality=65-80 --force --ext .png '{}'' || true
 
       - name: Generate WebP versions
         shell: bash
