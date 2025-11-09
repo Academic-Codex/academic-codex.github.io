@@ -6,7 +6,7 @@ area: inteligência artificial
 layout: default
 modal-id: 10
 date: 2014-07-18
-img: placeholder.jpg
+img: inteligencia-artificial.png
 alt: image-alt
 description:
 ---
