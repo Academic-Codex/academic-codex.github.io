@@ -6,7 +6,7 @@ area: software
 layout: default
 modal-id: 10
 date: 2014-07-18
-img: placeholder.jpg
+img: analise-projetos-orientado-objetos.jpg
 alt: image-alt
 description:
 ---
