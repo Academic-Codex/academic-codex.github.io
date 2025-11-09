@@ -264,8 +264,8 @@ section.success {
       box-sizing: border-box; 
     }
     .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
-      flex: 1 0 49%;
-      max-width: 49%;
+      flex: 1 0 55%;
+      max-width: 55%;
     }
   }
   @media (min-width: 960px) {
