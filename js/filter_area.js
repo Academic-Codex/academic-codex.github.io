@@ -3,12 +3,12 @@
   function norm(s){
     return (s || "")
       .toString()
-      .normalize("NFD")              // separa acentos em caracteres combinantes
-      .replace(/[\u0300-\u036f]/g,"")// remove os acentos
+      .normalize("NFD")               // separa acentos em caracteres combinantes
+      .replace(/[\u0300-\u036f]/g,"") // remove os acentos
       .trim()
       .toLowerCase()
-      .replace(/[^\w]+/g,"-")        // espaços/pontuação -> '-'
-      .replace(/-+/g,"-");           // remove hífens duplicados
+      .replace(/[^\w]+/g,"-")         // espaços/pontuação -> '-'
+      .replace(/-+/g,"-");            // remove hífens duplicados
   }
 
   function wireFilter(selectId, gridId) {
