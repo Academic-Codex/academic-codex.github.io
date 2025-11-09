@@ -1,0 +1,12 @@
+---
+title: "SMA0301 Cálculo I"
+link: /SMA0301-Calculo-I
+category: undergrad
+area: matematica
+layout: default
+modal-id: 10
+date: 2014-07-18
+img: calculo-i.png
+alt: image-alt
+description:
+---

@@ -1,6 +1,6 @@
 ---
-title: "SMA Cálculo II"
-link: /SMA-Calculo-II
+title: "SMA0332 Cálculo II"
+link: /SMA0332-Calculo-II
 category: undergrad
 area: matematica
 layout: default
