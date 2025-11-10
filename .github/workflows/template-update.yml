@@ -2,7 +2,7 @@ name: Notify disciplines on template change
 
 env:
   GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
-  
+
 on:
   push:
     branches: [ main ]
@@ -21,8 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Disparar rebuild nas disciplinas
-        env:
-          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}   # token com permissão 'repo'
         run: |
           repos=(
             "Academic-Codex/SAP0679-Humanidades-e-Ciencias-Sociais"
