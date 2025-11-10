@@ -107,9 +107,9 @@ jobs:
           echo "Baixando hero: $HERO_URL"
 
           mkdir -p template/assets
-          curl -fsSL "$HERO_URL" -o template/assets/hero.png
+          curl -fsSL "$HERO_URL" -o template/assets/img/hero.png
 
-          sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.png#g' template/index.html
+          sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g' template/index.html
 
       # 7) Constrói o site (usa o script do central)
       - name: Build site
