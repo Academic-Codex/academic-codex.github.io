@@ -1,6 +1,6 @@
 ---
 title: "SCE0611 Engenharia de Software"
-link: /SCE0611-Engenharia-de-Software
+link: /SCE0611-Engenharia-De-Software
 category: undergrad
 area: software
 layout: default
