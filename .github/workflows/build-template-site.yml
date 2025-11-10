@@ -59,34 +59,38 @@ jobs:
           pip install nbconvert jinja2 nbformat
 
       # 4) (Opcional) baixar hero dinâmica conforme .github/scripts/repo.yml do caller
-      - name: Fetch hero image
+      - name: Fetch hero image 
         shell: bash
         run: |
           set -euo pipefail
-          BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/main"
-          if [[ -f .github/scripts/repo.yml ]]; then
-            python - <<'PY' > hero_relpath.txt
-            import yaml,sys
-            from pathlib import Path
-            d={}
-            p=Path(".github/scripts/repo.yml")
-            if p.exists():
-                d=yaml.safe_load(p.read_text(encoding="utf-8")) or {}
-            sub=(d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
-            fil=(d.get("HERO_FILE") or "").strip("/")
-            if not fil: sys.exit("HERO_FILE ausente em .github/scripts/repo.yml")
-            print(f"{sub}/{fil}")
-            PY
-            HERO_REL=$(cat hero_relpath.txt)
-            HERO_URL="$BASE_RAW/$HERO_REL"
-            mkdir -p template_local/assets
-            rsync -a "central/${{ inputs.template_path }}/" template_local/
-            curl -fsSL "$HERO_URL" -o template_local/assets/hero.jpg
-            sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.jpg#g' template_local/index.html
-            echo "TEMPLATE_DIR=template_local" >> $GITHUB_ENV
-          else
-            echo "TEMPLATE_DIR=central/${{ inputs.template_path }}" >> $GITHUB_ENV
-          fi
+
+          BASE_RAW="https://raw.githubusercontent.com/Academic-Codex/academic-codex.github.io/main"
+
+          # Lê ASSETS_SUBDIR e HERO_FILE do seu .scripts/codex.yml
+          python - <<'PY' > hero_relpath.txt
+          import yaml, sys
+          from pathlib import Path
+          d = {}
+          p = Path(".scripts/codex.yml")
+          if p.exists():
+              d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+          sub = (d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
+          fil = (d.get("HERO_FILE") or "").strip("/")
+          if not fil:
+              sys.exit("HERO_FILE ausente em .scripts/codex.yml")
+          print(f"{sub}/{fil}")
+          PY
+
+          HERO_REL=$(cat hero_relpath.txt)
+          HERO_URL="$BASE_RAW/$HERO_REL"
+
+          echo "Baixando hero: $HERO_URL"
+          mkdir -p template/assets
+          curl -fsSL "$HERO_URL" -o template/assets/hero.jpg
+
+          # Substitui o placeholder do template por caminho local
+          sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.jpg#g' template/index.html
+
 
       # 5) Rodar o build central (script fica no repo central)
       - name: Build static site
