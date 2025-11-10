@@ -1,0 +1,109 @@
+# .github/workflows/build-template-site.yml (reutilizável)
+name: Build Template Site (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      site_title:
+        description: "Título do site"
+        type: string
+        required: false
+        default: ""
+      execute:
+        description: "Executar notebooks antes de converter (true/false)"
+        type: string
+        required: false
+        default: "false"
+      template_repo:
+        description: "Repo do template (org/repo)"
+        type: string
+        required: false
+        default: "Academic-Codex/academic-codex.github.io"
+      template_path:
+        description: "Caminho do template dentro do repo central"
+        type: string
+        required: false
+        default: ".github/actions/build-template-site/template"
+    secrets:
+      GH_TOKEN:
+        required: false  # use secrets: inherit se preferir
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      # 1) Checkout do REPO DA DISCIPLINA (caller)
+      - name: Checkout caller repo
+        uses: actions/checkout@v4
+
+      # 2) Checkout do REPO CENTRAL (onde ficam template + scripts)
+      - name: Checkout central template repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.template_repo }}
+          path: central
+
+      # 3) Preparar Python / nbconvert
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install nbconvert deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install nbconvert jupyter jupyterlab_pygments pygments pyyaml
+
+      # 4) (Opcional) baixar hero dinâmica conforme .github/scripts/repo.yml do caller
+      - name: Fetch hero image
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/main"
+          if [[ -f .github/scripts/repo.yml ]]; then
+            python - <<'PY' > hero_relpath.txt
+            import yaml,sys
+            from pathlib import Path
+            d={}
+            p=Path(".github/scripts/repo.yml")
+            if p.exists():
+                d=yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+            sub=(d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
+            fil=(d.get("HERO_FILE") or "").strip("/")
+            if not fil: sys.exit("HERO_FILE ausente em .github/scripts/repo.yml")
+            print(f"{sub}/{fil}")
+            PY
+            HERO_REL=$(cat hero_relpath.txt)
+            HERO_URL="$BASE_RAW/$HERO_REL"
+            mkdir -p template_local/assets
+            rsync -a "central/${{ inputs.template_path }}/" template_local/
+            curl -fsSL "$HERO_URL" -o template_local/assets/hero.jpg
+            sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.jpg#g' template_local/index.html
+            echo "TEMPLATE_DIR=template_local" >> $GITHUB_ENV
+          else
+            echo "TEMPLATE_DIR=central/${{ inputs.template_path }}" >> $GITHUB_ENV
+          fi
+
+      # 5) Rodar o build central (script fica no repo central)
+      - name: Build static site
+        run: |
+          set -euxo pipefail
+          rm -rf site
+          python central/.github/scripts/build_site.py \
+            --src . \
+            --out site \
+            --template "$TEMPLATE_DIR" \
+            --title "${{ inputs.site_title || github.repository }}" \
+            --execute ${{ inputs.execute }}
+
+      # 6) Publicar (gh-pages)
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # ou secrets.GH_PAGES_TOKEN
+          publish_dir: ./site
+          publish_branch: gh-pages
