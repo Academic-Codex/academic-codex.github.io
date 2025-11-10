@@ -6,7 +6,7 @@ area: fisica
 layout: default
 modal-id: 2
 date: 2014-07-17
-img: mecanica-quantica.jpg
+img: mecanica-quantica.png
 alt: image-alt
 description:
 ---

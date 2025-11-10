@@ -6,7 +6,7 @@ area: inteligência artificial
 layout: default
 modal-id: 4
 date: 2014-07-16
-img: estatistica.jpg
+img: estatistica.png
 alt: image-alt
 description:
 ---
