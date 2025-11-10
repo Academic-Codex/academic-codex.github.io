@@ -7,13 +7,13 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/actions/build-template-site/template/**'   
+      - '.github/template/**'   
   # (opcional) se quiser cobrir merges de PRs também:
   pull_request:
     types: [closed]
     branches: [ main ]
     paths:
-      - '.github/actions/build-template-site/template/**' 
+      - '.github/template/**' 
 
 jobs:
   notify:

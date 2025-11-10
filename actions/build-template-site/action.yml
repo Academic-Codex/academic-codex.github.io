@@ -20,7 +20,7 @@ runs:
       with:
         repository: academic-codex/github.io
         path: template-global
-        sparse-checkout: ".github/actions/build-template-site/template"
+        sparse-checkout: ".github/template"
 
     - name: Configurar Python
       uses: actions/setup-python@v5
@@ -39,7 +39,7 @@ runs:
       shell: bash
 
     - name: Copiar template global
-      run: cp -r template-global/.github/actions/build-template-site/template/* site/
+      run: cp -r template-global/.github/template/* site/
       shell: bash
 
     - name: Publicar no GitHub Pages
