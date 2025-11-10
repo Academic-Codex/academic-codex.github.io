@@ -24,19 +24,21 @@ jobs:
         run: |
           repos=(
             "Academic-Codex/SAP0679-Humanidades-e-Ciencias-Sociais"
+            "Academic-Codex/MAE5911-Estatistica-e-Machine-Learning"
             "Academic-Codex/PGF5001-Mecanica-Quantica"
+            "Academic-Codex/PGF5005-Mecanica-Classica"
+            "Academic-Codex/PGF5261-Teoria-de-Grupos-Aplicada"
+            "Academic-Codex/PGF5006-Mecanica-Estatistica"
+            "Academic-Codex/PGF5003-Eletrodinamica"
             "Academic-Codex/SQM0405-Quimica-Geral-Experimental"
             "Academic-Codex/SME0600-Calculo-Numerico"
             "Academic-Codex/EAP5054-Formacao-Cientista-Empreendedor-II"
             "Academic-Codex/DPG5011-Formacao-Do-Cientista-Empreendedor"
             "Academic-Codex/SEL0622-Projeto-Circuito-Integrado-II"
             "Academic-Codex/MCKZ-Metodos-Quantitativos"
-            "Academic-Codex/PGF5261-Teoria-de-Grupos-Aplicada"
-            "Academic-Codex/PGF5003-Eletrodinamica"
             "Academic-Codex/MAT5730-Algebra-Linear"
             "Academic-Codex/MAC5921-Deep-Learning"
             "Academic-Codex/MAC5722-Complexidade-Computacional"
-            "Academic-Codex/PGF5006-Mecanica-Estatistica"
             "Academic-Codex/SSC0748-Redes-Moveis"
             "Academic-Codex/SSC0643-Avaliacao-Desempenho"
             "Academic-Codex/SSC0144-Redes-De-Alto-Desempenho"
@@ -81,8 +83,6 @@ jobs:
             "Academic-Codex/SCE0614-Inteligencia-Artificial"
             "Academic-Codex/SCC0635-Visao-Computacional-em-Robotica"
             "Academic-Codex/FFI0181-Laboratorio-de-Fisica-II"
-            "Academic-Codex/MAE5911-Estatistica-e-Machine-Learning"
-            "Academic-Codex/PGF5005-Mecanica-Classica"
           )
           for repo in "${repos[@]}"; do
             curl -s -X POST \
