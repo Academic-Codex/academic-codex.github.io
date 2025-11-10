@@ -53,10 +53,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install nbconvert deps
+      - name: Install nbconvert
         run: |
           pip install --upgrade pip
-          pip install nbconvert jinja2 nbformat pyyaml
+          pip install pyyaml nbconvert jinja2 nbformat
 
       # 4) (Opcional) baixar hero dinâmica conforme .github/scripts/repo.yml do caller
       - name: Fetch hero image 
