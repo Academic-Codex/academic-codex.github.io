@@ -56,13 +56,13 @@ jobs:
           import yaml, sys
           from pathlib import Path
           d = {}
-          p = Path(".scripts/codex.yml")
+          p = Path(".github/scripts/repo.yml")
           if p.exists():
               d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
           sub = (d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
           fil = (d.get("HERO_FILE") or "").strip("/")
           if not fil:
-              sys.exit("HERO_FILE ausente em .scripts/codex.yml")
+              sys.exit("HERO_FILE ausente em .github/scripts/repo.yml")
           print(f"{sub}/{fil}")
           PY
 
@@ -89,7 +89,7 @@ jobs:
             --out site \
             --template template \
             --title "${{ inputs.site_title }}" \
-            --cfg .scripts/codex.yml \
+            --cfg .github/scripts/repo.yml \
             --execute ${{ inputs.execute }}
 
       - name: Deploy to gh-pages
