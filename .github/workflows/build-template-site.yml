@@ -1,40 +1,61 @@
-# .github/workflows/build-template-site.yml (reutilizável)
-name: Build Template Site (reusable)
+# .github/workflows/build-template-site.yml  (reutilizável no repo central)
+name: Build template site (reusable)
 
 on:
   workflow_call:
     inputs:
       site_title:
-        description: "Título do site"
         type: string
         required: false
-        default: ""
+        default: ''
       execute:
-        description: "Executar notebooks antes de converter (true/false)"
         type: string
         required: false
         default: "false"
       template_repo:
-        description: "Repo do template (org/repo)"
         type: string
         required: false
         default: "Academic-Codex/academic-codex.github.io"
-      template_path:
-        description: "Caminho do template dentro do repo central"
+      template_ref:
         type: string
         required: false
-        default: ".github/template"
-    secrets:
-      GH_TOKEN:
-        required: false  # use secrets: inherit se preferir
+        default: "v1"          
+      template_path:
+        type: string
+        required: false
+        default: ".github/template" 
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout disciplina
+      # 1) Checkout do repositório da disciplina (consumidor)
+      - name: Checkout discipline repo
         uses: actions/checkout@v4
 
+      # 2) Checkout do repositório central no subdir "central/"
+      - name: Checkout central (template/scripts)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.template_repo }}
+          ref: ${{ inputs.template_ref }}
+          path: central
+          # Opcional: só baixar o que precisa (economiza tempo):
+          sparse-checkout: |
+            .github/template
+            .github/scripts/build_site.py
+          sparse-checkout-cone-mode: false
+
+      # 3) Verificação de existência do template
+      - name: Validate template path
+        run: |
+          set -euo pipefail
+          TEMPLATE_DIR="central/${{ inputs.template_path }}"
+          echo "TEMPLATE_DIR=$TEMPLATE_DIR"
+          test -f "$TEMPLATE_DIR/index.html" || { echo "index.html não encontrado em $TEMPLATE_DIR"; ls -laR central; exit 1; }
+
+      # 4) Setup Python rápido
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -45,18 +66,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install nbconvert jinja2 nbformat pyyaml
 
+      # 5) Copia o template do central para ./template/
+      - name: Copy template from central
+        run: |
+          set -euo pipefail
+          rm -rf template
+          rsync -a --delete "central/${{ inputs.template_path }}/" "template/"
+
+      # 6) Monta a URL base raw do central e lê HERO_FILE/ASSETS_SUBDIR do repositório da disciplina
       - name: Fetch hero image
         shell: bash
         run: |
           set -euo pipefail
+          BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
-          BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/main"
-
+          # Lê .github/scripts/repo.yml do repositório da disciplina
           python - <<'PY' > hero_relpath.txt
           import yaml, sys
           from pathlib import Path
-          d = {}
           p = Path(".github/scripts/repo.yml")
+          d = {}
           if p.exists():
               d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
           sub = (d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
@@ -68,23 +97,18 @@ jobs:
 
           HERO_REL=$(cat hero_relpath.txt)
           HERO_URL="$BASE_RAW/$HERO_REL"
-
           echo "Baixando hero: $HERO_URL"
 
-          # Copia o template do repositório central
-          rm -rf template
-          rsync -a "central/${{ inputs.template_path }}/" template/
-
-          # Cria a pasta e baixa o hero (PNG fixo)
           mkdir -p template/assets
           curl -fsSL "$HERO_URL" -o template/assets/hero.png
 
-          # Atualiza o placeholder do index.html
+          # Atualiza placeholder no index.html do template copiado
           sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.png#g' template/index.html
 
-      - name: Build static site
+      # 7) Constrói o site (usa script do central)
+      - name: Build site
         run: |
-          python .github/scripts/build_site.py \
+          python central/.github/scripts/build_site.py \
             --src . \
             --out site \
             --template template \
@@ -92,8 +116,10 @@ jobs:
             --cfg .github/scripts/repo.yml \
             --execute ${{ inputs.execute }}
 
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+      # 8) Diagnóstico rápido
+      - name: Show site tree
+        run: |
+          echo "== ls -R site =="
+          ls -lah site || true
+          echo "== find site -maxdepth 3 -type f =="
+          find site -maxdepth 3 -type f | sort
