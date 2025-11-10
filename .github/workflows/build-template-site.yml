@@ -66,18 +66,18 @@ jobs:
 
           BASE_RAW="https://raw.githubusercontent.com/Academic-Codex/academic-codex.github.io/main"
 
-          # Lê ASSETS_SUBDIR e HERO_FILE do seu .scripts/codex.yml
+          # Lê ASSETS_SUBDIR e HERO_FILE do seu .github/scripts/repo.yml
           python - <<'PY' > hero_relpath.txt
           import yaml, sys
           from pathlib import Path
           d = {}
-          p = Path(".scripts/codex.yml")
+          p = Path(".github/scripts/repo.yml")
           if p.exists():
               d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
           sub = (d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
           fil = (d.get("HERO_FILE") or "").strip("/")
           if not fil:
-              sys.exit("HERO_FILE ausente em .scripts/codex.yml")
+              sys.exit("HERO_FILE ausente em .github/scripts/repo.yml")
           print(f"{sub}/{fil}")
           PY
 
@@ -86,10 +86,10 @@ jobs:
 
           echo "Baixando hero: $HERO_URL"
           mkdir -p template/assets
-          curl -fsSL "$HERO_URL" -o template/assets/hero.jpg
+          curl -fsSL "$HERO_URL" -o template/assets/hero.png
 
           # Substitui o placeholder do template por caminho local
-          sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.jpg#g' template/index.html
+          sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.png#g' template/index.html
 
 
       # 5) Rodar o build central (script fica no repo central)
