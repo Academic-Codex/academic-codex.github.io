@@ -24,7 +24,6 @@ jobs:
         run: |
           repos=(
             "Academic-Codex/SAP0679-Humanidades-e-Ciencias-Sociais"
-            # adicione outros repositórios aqui...
           )
           for repo in "${repos[@]}"; do
             curl -s -X POST \
