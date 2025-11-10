@@ -1,6 +1,6 @@
 ---
-title: "PGF5261 Teoria de Grupos Aplicada Sólidos e Moléculas"
-link: /PGF5261-Teoria-Grupos-Solidos-Moleculas
+title: "PGF5261 Teoria de Grupos Aplicada a Sólidos e Moléculas"
+link: /PGF5261-Teoria-Grupos-Aplicada
 category: grad
 area: fisica
 layout: default
