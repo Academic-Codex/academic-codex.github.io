@@ -10,7 +10,7 @@
   min-height: 52vh;
   border-radius: 16px;
   margin: 1.25rem 0 2rem;
-  background: #111 center / cover no-repeat url("../assets/img/hero.jpg");
+  background: #111 center / cover no-repeat url("../assets/img/hero.png");
   display: grid;
   place-items: center;
   overflow: hidden;
