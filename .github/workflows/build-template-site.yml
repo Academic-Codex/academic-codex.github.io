@@ -1,5 +1,5 @@
-# .github/workflows/build-template-site.yml  (reutilizável no repo central)
-name: Build template site (reusable)
+# .github/workflows/build-template-site.yml
+name: Build & Deploy Template Site (Reusable)
 
 on:
   workflow_call:
@@ -19,11 +19,20 @@ on:
       template_ref:
         type: string
         required: false
-        default: "v1"          
+        default: "v1"
       template_path:
         type: string
         required: false
-        default: ".github/template" 
+        default: ".github/template"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -34,20 +43,19 @@ jobs:
       - name: Checkout discipline repo
         uses: actions/checkout@v4
 
-      # 2) Checkout do repositório central no subdir "central/"
+      # 2) Checkout do repositório central (template/scripts)
       - name: Checkout central (template/scripts)
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.template_repo }}
           ref: ${{ inputs.template_ref }}
           path: central
-          # Opcional: só baixar o que precisa (economiza tempo):
           sparse-checkout: |
             .github/template
             .github/scripts/build_site.py
           sparse-checkout-cone-mode: false
 
-      # 3) Verificação de existência do template
+      # 3) Verifica se o template existe
       - name: Validate template path
         run: |
           set -euo pipefail
@@ -55,13 +63,13 @@ jobs:
           echo "TEMPLATE_DIR=$TEMPLATE_DIR"
           test -f "$TEMPLATE_DIR/index.html" || { echo "index.html não encontrado em $TEMPLATE_DIR"; ls -laR central; exit 1; }
 
-      # 4) Setup Python rápido
+      # 4) Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install nbconvert deps
+      - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
           pip install nbconvert jinja2 nbformat pyyaml
@@ -73,14 +81,13 @@ jobs:
           rm -rf template
           rsync -a --delete "central/${{ inputs.template_path }}/" "template/"
 
-      # 6) Monta a URL base raw do central e lê HERO_FILE/ASSETS_SUBDIR do repositório da disciplina
+      # 6) Monta URL base e baixa HERO_FILE do repositório da disciplina
       - name: Fetch hero image
         shell: bash
         run: |
           set -euo pipefail
           BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
-          # Lê .github/scripts/repo.yml do repositório da disciplina
           python - <<'PY' > hero_relpath.txt
           import yaml, sys
           from pathlib import Path
@@ -102,10 +109,9 @@ jobs:
           mkdir -p template/assets
           curl -fsSL "$HERO_URL" -o template/assets/hero.png
 
-          # Atualiza placeholder no index.html do template copiado
           sed -i.bak 's#{{ *HERO_URL *}}#./assets/hero.png#g' template/index.html
 
-      # 7) Constrói o site (usa script do central)
+      # 7) Constrói o site (usa o script do central)
       - name: Build site
         run: |
           python central/.github/scripts/build_site.py \
@@ -116,10 +122,27 @@ jobs:
             --cfg .github/scripts/repo.yml \
             --execute ${{ inputs.execute }}
 
-      # 8) Diagnóstico rápido
+      # 8) Diagnóstico opcional
       - name: Show site tree
         run: |
-          echo "== ls -R site =="
+          echo "== Conteúdo da pasta site =="
           ls -lah site || true
-          echo "== find site -maxdepth 3 -type f =="
+          echo "== Estrutura de arquivos =="
           find site -maxdepth 3 -type f | sort
+
+      # 9) Upload do artefato (GitHub Pages)
+      - name: Upload artifact (site/)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
