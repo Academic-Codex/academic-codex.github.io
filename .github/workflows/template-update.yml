@@ -1,5 +1,8 @@
 name: Notify disciplines on template change
 
+env:
+  GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+  
 on:
   push:
     branches: [ main ]
@@ -10,7 +13,7 @@ on:
     types: [closed]
     branches: [ main ]
     paths:
-      - '.github/actions/build-template-site/template/**'
+      - '.github/actions/build-template-site/template/**' 
 
 jobs:
   notify:
