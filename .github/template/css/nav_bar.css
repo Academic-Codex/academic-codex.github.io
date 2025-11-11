@@ -69,7 +69,7 @@
 /* cor padrão dos links da navbar (azul claro do tema) */
 .navbar a,
 .navbar a:visited {
-  color: var(--link);               /* evita roxo de “visited” */
+  color: var(--link);               /* evita a cor secundaria do link */
 }
 
 /* feedback de hover sem sublinhado */
@@ -90,8 +90,8 @@
 .repo-link {
   display: inline-flex;
   align-items: center;
-  font-size: 20px;                  /* deixa o ícone com presença */
+  font-size: 20px;                
   line-height: 1;
-  color: var(--link);               /* azul claro como você pediu */
+  color: var(--link);            
 }
 .repo-link:hover { opacity: .85; }
