@@ -1,5 +1,5 @@
 # .github/workflows/build-template-site.yml
-name: Build & Deploy Template Site (Reusable)
+name: Build & Deploy Template Site
 
 on:
   workflow_call:
