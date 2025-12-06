@@ -8,6 +8,7 @@ on:
     branches: [ main ]
     paths:
       - '.github/template/**'   
+      - '.github/scripts/**'   
   # (opcional) se quiser cobrir merges de PRs também:
   pull_request:
     types: [closed]
