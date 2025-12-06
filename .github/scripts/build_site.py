@@ -122,10 +122,18 @@ def collect_tree(src: Path, out: Path, execute: bool):
         out_html.parent.mkdir(parents=True, exist_ok=True)
 
         cmd = [
-            sys.executable, "-m", "nbconvert", "--to", "html",
-            "--HTMLExporter.embed_images=True", 
-            "--output", out_html.name, "--output-dir", str(out_html.parent), str(path)
+            sys.executable, "-m", "nbconvert",
+            "--to", "html",
+            "--template=classic",
+            "--HTMLExporter.embed_images=True",
+            "--TagRemovePreprocessor.enabled=True",
+            "--TagRemovePreprocessor.remove_input_tags=hide-input",
+            "--no-input",
+            "--output", out_html.name,
+            "--output-dir", str(out_html.parent),
+            str(path),
         ]
+        
         if execute:
             cmd.append("--execute")
         subprocess.run(cmd, check=True)
