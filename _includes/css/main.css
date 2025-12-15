@@ -514,3 +514,39 @@ footer .footer-below {
 .card-title {
   text-transform: none !important;
 }
+
+/* ================================
+   HERO/HEADER: só imagem full-width
+   ================================ */
+
+/* tira fundo e espaçamentos do tema */
+header{
+  background: transparent !important;
+  color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 0;          /* evita “faixa”/gap embaixo da imagem */
+  text-align: left;        /* não precisamos centralizar nada */
+}
+
+/* remove o bloco com título/subtítulo (seu "hero-content") */
+header .hero-content{
+  display: none !important;
+}
+
+/* em alguns temas o .container dentro do header cria padding e altura */
+header .container{
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* imagem do hero ocupando a tela inteira */
+header > img{
+  display: block;
+  width: 100vw;            /* garante “de ponta a ponta” */
+  max-width: 100%;
+  height: auto;
+  margin: 0 !important;
+}
