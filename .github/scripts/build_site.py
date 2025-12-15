@@ -128,7 +128,6 @@ def collect_tree(src: Path, out: Path, execute: bool):
             "--HTMLExporter.embed_images=True",
             "--TagRemovePreprocessor.enabled=True",
             "--TagRemovePreprocessor.remove_input_tags=hide-input",
-            "--no-input",
             "--output", out_html.name,
             "--output-dir", str(out_html.parent),
             str(path),
