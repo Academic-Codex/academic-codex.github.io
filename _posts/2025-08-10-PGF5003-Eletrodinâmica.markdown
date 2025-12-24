@@ -1,0 +1,12 @@
+---
+title: "PGF5003 Eletrodinâmica"
+link: /PGF5003-Eletrodinamica
+category: grad
+area: fisica
+layout: default
+modal-id: 1
+date: 2014-07-18
+img: eletrodinamica.png
+alt: image-alt
+description:
+---
