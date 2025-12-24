@@ -101,8 +101,22 @@
 
     const log = (...a) => console.log('[avatar]', ...a);
     const errlog = (...a) => console.error('[avatar]', ...a);
-    function safeAtob(s) { s = (s || '').toString().trim().replace(/[\r\n\s]/g, '').replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return atob(s); }
-    const b64ToU8 = (b64) => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    // function safeAtob(s) { s = (s || '').toString().trim().replace(/[\r\n\s]/g, '').replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return atob(s); }
+    // const b64ToU8 = (b64) => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    function normB64(s) {
+        s = (s || '').toString().trim()
+          .replace(/[\r\n\s]/g, '')
+          .replace(/-/g, '+')
+          .replace(/_/g, '/');
+        while (s.length % 4) s += '=';
+        return s;
+      }
+
+      function safeAtob(s) {
+        return atob(normB64(s));
+      }
+
+    const b64ToU8 = (b64) => Uint8Array.from(atob(normB64(b64)), c => c.charCodeAt(0));
     const hexToBytes = (hex) => new Uint8Array((hex.match(/.{1,2}/g) || []).map(h => parseInt(h, 16)));
 
     async function loadProtectedAvatar() {
