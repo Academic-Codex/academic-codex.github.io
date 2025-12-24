@@ -1,6 +1,6 @@
 ---
 title: "43002212 Física IV"
-link: /IF43002212-Fisica-IV
+link: /IF4302212-Fisica-IV
 category: undergrad
 area: fisica
 layout: default

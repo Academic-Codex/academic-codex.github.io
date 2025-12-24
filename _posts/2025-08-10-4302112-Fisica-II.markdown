@@ -1,6 +1,6 @@
 ---
 title: "43002112 Física II"
-link: /IF43002112-Fisica-II
+link: /IF4302112-Fisica-II
 category: undergrad
 area: fisica
 layout: default

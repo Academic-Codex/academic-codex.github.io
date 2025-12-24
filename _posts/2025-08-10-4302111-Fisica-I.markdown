@@ -1,6 +1,6 @@
 ---
 title: "43002111 Física I"
-link: /IF43002111-Fisica-I
+link: /IF4302111-Fisica-I
 category: undergrad
 area: fisica
 layout: default
