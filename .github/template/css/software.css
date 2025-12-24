@@ -123,15 +123,20 @@
     /* ajusta à altura da viewport */
 }
 
-/* Sidebar rolável em telas pequenas */
 .sidebar {
-    overflow: hidden;
-    /* evita scroll duplo no container */
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    padding: 12px;
+
+    /* ESTE é o scroll certo */
+    overflow-y: auto;
 }
 
+/* remove qualquer limite artificial */
 .sidebar .tree {
-    max-height: 70svh;
-    overflow: auto;
+    max-height: none;
+    overflow: visible;
 }
 
 /* Viewer ocupa todo o espaço e permite rolagem (inclui horizontal) */
