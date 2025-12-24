@@ -1,0 +1,12 @@
+---
+title: "43002111 Física I"
+link: /IF43002111-Fisica-I
+category: undergrad
+area: fisica
+layout: default
+modal-id: 10
+date: 2025-07-18
+img: fisica-i.png
+alt: image-alt
+description:
+---

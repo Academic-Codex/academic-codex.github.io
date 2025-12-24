@@ -1,0 +1,12 @@
+---
+title: "43002112 Física II"
+link: /IF43002112-Fisica-II
+category: undergrad
+area: fisica
+layout: default
+modal-id: 10
+date: 2025-07-18
+img: fisica-ii.png
+alt: image-alt
+description:
+---

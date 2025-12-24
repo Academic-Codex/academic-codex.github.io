@@ -1,0 +1,12 @@
+---
+title: "43002212 Física IV"
+link: /IF43002212-Fisica-IV
+category: undergrad
+area: fisica
+layout: default
+modal-id: 10
+date: 2025-07-18
+img: fisica-iv.png
+alt: image-alt
+description:
+---
