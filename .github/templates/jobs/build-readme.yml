@@ -1,5 +1,8 @@
 name: Build README (Reusable)
 
+env:
+  README_TEMPLATE_PATH: ".github/templates/readme"
+
 on:
   workflow_call:
     inputs:
@@ -7,18 +10,13 @@ on:
         type: string
         required: false
         default: "Academic-Codex/academic-codex.github.io"
+      repo_cfg_path:
+        type: string
+        required: true
       template_ref:
         type: string
         required: false
         default: "v1" # default em uso!
-      template_path:
-        type: string
-        required: false
-        default: ".github/readme" # default em uso!
-      repo_cfg_path:
-        type: string
-        required: false
-        default: ".github/scripts/repo.yml"
 
 permissions:
   contents: write
@@ -53,7 +51,7 @@ jobs:
         run: |
           python central/.github/scripts/build_readme.py \
             --repo . \
-            --central "central/${{ inputs.template_path }}" \
+            --central "central/${{ env.README_TEMPLATE_PATH }}" \
             --repo-cfg "${{ inputs.repo_cfg_path }}"
 
       - name: Commit changes (if any)

@@ -1,4 +1,4 @@
-name: Notify disciplines on readme template change
+name: Notify disciplines on site template change
 
 env:
   GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
@@ -7,7 +7,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/readme/**'
+      - '.github/templates/site/**'   
+      - '.github/scripts/build_site.py' 
+      - '.github/jobs/build-site.yml'  
+      - 'img/**'   
 
 jobs:
   notify:
@@ -18,7 +21,7 @@ jobs:
         env:
           ORG: Academic-Codex
           EXCLUDE_REPO: academic-codex.github.io
-          EVENT_TYPE: readme-template-updated
+          EVENT_TYPE: site-template-updated
         run: |
           set -euo pipefail
 

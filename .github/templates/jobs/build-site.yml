@@ -1,6 +1,9 @@
 # .github/workflows/build-template-site.yml
 name: Build & Deploy Template Site
 
+env:
+  SITE_TEMPLATE_PATH: ".github/templates/site"
+
 on:
   workflow_call:
     inputs:
@@ -20,14 +23,9 @@ on:
         type: string
         required: false
         default: "v1" #está usando este default!
-      template_path:
-        type: string
-        required: false
-        default: ".github/template"
       repo_cfg_path:
         type: string
-        required: false
-        default: ".github/scripts/repo.yml"
+        required: true
 
 permissions:
   contents: write
@@ -63,7 +61,7 @@ jobs:
       - name: Validate template path
         run: |
           set -euo pipefail
-          TEMPLATE_DIR="central/${{ inputs.template_path }}"
+          TEMPLATE_DIR="central/${{ env.SITE_TEMPLATE_PATH }}"
           echo "TEMPLATE_DIR=$TEMPLATE_DIR"
           test -f "$TEMPLATE_DIR/index.html" || { echo "index.html não encontrado em $TEMPLATE_DIR"; ls -laR central; exit 1; }
 
