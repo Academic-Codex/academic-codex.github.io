@@ -151,3 +151,36 @@
     overflow-x: hidden;
   }
 }
+
+/* ===== Software tree: 1 notebook por linha + scroll horizontal ===== */
+
+/* Sidebar deve poder rolar vertical e horizontal quando necessário */
+.sidebar {
+  overflow: auto;           /* em vez de só overflow-y */
+}
+
+/* A árvore e sub-árvores podem rolar horizontalmente */
+.tree,
+.children {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Cada item ocupa uma linha inteira */
+.node {
+  margin: 2px 0;
+}
+
+/* Notebook: NÃO quebrar linha, e ocupar uma linha inteira */
+a.file-notebook {
+  display: block;           /* 1 por linha */
+  white-space: nowrap;      /* impede quebra */
+  overflow-wrap: normal;    /* evita wrap “esperto” */
+  word-break: normal;       /* não quebra palavra */
+  hyphens: none;            /* não hifeniza */
+}
+
+/* (Opcional) também evitar quebra no sufixo .ipynb */
+.file-notebook::after {
+  white-space: nowrap;
+}
