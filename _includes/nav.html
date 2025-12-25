@@ -9,12 +9,23 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand"
-        href="{{ site.url }}"
-        rel="noopener">
-        ❄
-      </a>
-      <a class="navbar-brand" href="#page-top">{{ site.title }}</a>
+      <div class="navbar-brand-wrapper">
+        <!-- ÍCONE (link) -->
+        <a class="navbar-brand brand-logos"
+          href="https://github.com/academic-codex"
+          target="_blank"
+          rel="noopener"
+          aria-label="GitHub repository">
+          <img src="{{ '/img/github-logo.png' | relative_url }}"
+              alt="GitHub"
+              class="brand-logo github-logo">
+        </a>
+
+        <!-- TEXTO (não link) -->
+        <span class="navbar-title-text">
+          {{ site.title }}
+        </span>
+      </div>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
