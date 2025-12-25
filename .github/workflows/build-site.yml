@@ -81,7 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf template
-          rsync -a --delete "central/${{ inputs.template_path }}/" "template/"
+          rsync -a --delete "central/${{ env.SITE_TEMPLATE_PATH }}/" "template/"
 
       # 6) Monta URL base e baixa HERO_FILE do repositório da disciplina
       - name: Fetch hero image
