@@ -19,4 +19,22 @@
     font-family="Inter, Arial, sans-serif">
     {{REPO_TAGLINE}}
   </text>
+
+  <!-- Subtitle -->
+  <text x="50%" y="95"
+    text-anchor="middle"
+    font-size="16"
+    fill="#9ca3af"
+    font-family="Inter, Arial, sans-serif">
+    lectures • notebooks • references • interactive material
+  </text>
+
+  <!-- Call to action -->
+  <text x="50%" y="125"
+    text-anchor="middle"
+    font-size="16"
+    fill="#93c5fd"
+    font-family="Inter, Arial, sans-serif">
+    → PGF5002-Mecanica-Quantica-II
+  </text>
 </svg>
