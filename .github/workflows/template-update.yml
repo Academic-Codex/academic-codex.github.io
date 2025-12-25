@@ -21,74 +21,74 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Disparar rebuild nas disciplinas
+      - name: Informa alteração do template
+        env:
+          ORG: Academic-Codex
+          EXCLUDE_REPO: academic-codex.github.io
+          EVENT_TYPE: template-updated
         run: |
-          repos=(
-            "Academic-Codex/SAP0679-Humanidades-e-Ciencias-Sociais"
-            "Academic-Codex/MAE5911-Estatistica-e-Machine-Learning"
-            "Academic-Codex/PGF5001-Mecanica-Quantica"
-            "Academic-Codex/PGF5005-Mecanica-Classica"
-            "Academic-Codex/PGF5261-Teoria-de-Grupos-Aplicada"
-            "Academic-Codex/PGF5006-Mecanica-Estatistica"
-            "Academic-Codex/PGF5003-Eletrodinamica"
-            "Academic-Codex/SQM0405-Quimica-Geral-Experimental"
-            "Academic-Codex/SME0600-Calculo-Numerico"
-            "Academic-Codex/EAP5054-Formacao-Cientista-Empreendedor-II"
-            "Academic-Codex/DPG5011-Formacao-Do-Cientista-Empreendedor"
-            "Academic-Codex/SEL0622-Projeto-Circuito-Integrado-II"
-            "Academic-Codex/MCKZ-Metodos-Quantitativos"
-            "Academic-Codex/MAT5730-Algebra-Linear"
-            "Academic-Codex/MAC5921-Deep-Learning"
-            "Academic-Codex/MAC5722-Complexidade-Computacional"
-            "Academic-Codex/SSC0748-Redes-Moveis"
-            "Academic-Codex/SSC0643-Avaliacao-Desempenho"
-            "Academic-Codex/SSC0144-Redes-De-Alto-Desempenho"
-            "Academic-Codex/SME0610-Programacao-Matematica"
-            "Academic-Codex/SME0601-Calculo-Numerico-II"
-            "Academic-Codex/SMA0332-Calculo-II"
-            "Academic-Codex/SMA0302-Calculo-III"
-            "Academic-Codex/SMA0111-Funcoes-De-Variaveis-Complexas"
-            "Academic-Codex/SEP0587-Principios-de-Economia"
-            "Academic-Codex/SEP0527-Gestao-e-Organizacao"
-            "Academic-Codex/SEP0527-Gestao-Ambiental"
-            "Academic-Codex/SEP0527-Empreendedores-Em-Informatica"
-            "Academic-Codex/SEL0620-Controle-Digital"
-            "Academic-Codex/SEL0619-Comunicacao-Digital"
-            "Academic-Codex/SEL0618-Projeto-Circuito-Integrado-I"
-            "Academic-Codex/SEL0617-Fundamentos-Microeletronica"
-            "Academic-Codex/SEL0616-Principios-De-Comunicacao"
-            "Academic-Codex/SEL0615-Processamento-Digital-Sinais"
-            "Academic-Codex/SEL0615-Circuitos-Eletronicos-II"
-            "Academic-Codex/SEL0614-Microprocessadores"
-            "Academic-Codex/SEL0607-Organizacao-De-Computadores"
-            "Academic-Codex/SEL0607-Fundamentos-De-Semicondutores"
-            "Academic-Codex/SEL0606-Laboratorio-Sistemas-Digitais"
-            "Academic-Codex/SEL0366-Comunicacoes-Opticas"
-            "Academic-Codex/SEL0344-Antenas"
-            "Academic-Codex/SCE0620-Analise-e-Projeto-Orientado-a-Objeto"
-            "Academic-Codex/SCE0611-Engenharia-De-Software"
-            "Academic-Codex/SCC0650-Computacao-Grafica"
-            "Academic-Codex/SCC0661-Hipermidia-E-Multimidia"
-            "Academic-Codex/SCE0616-Sistemas-Distribuidos"
-            "Academic-Codex/SCE0615-Banco-de-Dados"
-            "Academic-Codex/SCE0613-Arquitetura-de-Computadores"
-            "Academic-Codex/SCE0610-Programacao-Orientada-a-Objetos"
-            "Academic-Codex/SCE0609-Sistemas-Operacionais-I"
-            "Academic-Codex/SCE0606-Algoritmos-e-Estrutura-de-dados-II"
-            "Academic-Codex/SCE0605-Teoria-Computacao-e-Compiladores"
-            "Academic-Codex/SCE0603-Algoritmos-e-Estrutura-De-Dados-I"
-            "Academic-Codex/SCE0600-Introducao-Ciencia-Da-Computacao-II"
-            "Academic-Codex/SCE0600-Introducao-Ciencia-Da-Computacao"
-            "Academic-Codex/SCE0245-Algoritmos-Avancados"
-            "Academic-Codex/SMA0301-Calculo-I"
-            "Academic-Codex/SCE0614-Inteligencia-Artificial"
-            "Academic-Codex/SCC0635-Visao-Computacional-em-Robotica"
-            "Academic-Codex/FFI0181-Laboratorio-de-Fisica-II"
-          )
-          for repo in "${repos[@]}"; do
-            curl -s -X POST \
+          set -euo pipefail
+
+          echo "Repositórios da organização academic-codex: $ORG"
+
+          page=1
+          repos_tmp="$(mktemp)"
+
+          while :; do
+            json="$(curl -sS \
               -H "Authorization: Bearer $GH_TOKEN" \
               -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/$repo/dispatches \
-              -d '{"event_type":"template-updated"}'
+              "https://api.github.com/orgs/$ORG/repos?per_page=100&page=$page")"
+
+            count="$(echo "$json" | jq 'length')"
+            if [ "$count" -eq 0 ]; then
+              break
+            fi
+
+            # pega full_name dos repos não arquivados e exclui o repo da homepage
+            echo "$json" | jq -r --arg org "$ORG" --arg excl "$EXCLUDE_REPO" '
+              .[]
+              | select(.archived == false)
+              | select(.name != $excl)
+              | .full_name
+            ' >> "$repos_tmp"
+
+            page=$((page + 1))
           done
+
+          # Remove duplicados e ordena
+          sort -u "$repos_tmp" > "$repos_tmp.sorted"
+
+          total="$(wc -l < "$repos_tmp.sorted" | tr -d ' ')"
+          echo "Total de repos para dispatch: $total"
+
+          echo "— Primeiros 20 repos (debug):"
+          head -n 20 "$repos_tmp.sorted" | sed 's/^/  - /'
+
+          # (Opcional) descomente se quiser imprimir TODOS (pode poluir logs)
+          # echo "— Lista completa (debug):"
+          # cat "$repos_tmp.sorted" | sed 's/^/  - /'
+
+          echo "Disparando repository_dispatch ($EVENT_TYPE)..."
+          ok=0
+          fail=0
+
+          while IFS= read -r repo; do
+            [ -z "$repo" ] && continue
+            echo "-> $repo"
+
+            http="$(curl -sS -o /dev/null -w "%{http_code}" -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$repo/dispatches" \
+              -d "{\"event_type\":\"$EVENT_TYPE\"}")"
+
+            if [ "$http" -ge 200 ] && [ "$http" -lt 300 ]; then
+              ok=$((ok + 1))
+            else
+              fail=$((fail + 1))
+              echo "   ⚠️ falhou (HTTP $http) em $repo"
+            fi
+          done < "$repos_tmp.sorted"
+
+          echo "Resultado: ok=$ok fail=$fail total=$total"
