@@ -1,0 +1,32 @@
+<svg width="1200" height="260" viewBox="0 0 1200 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1220" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+  </defs>
+
+  <!-- Card -->
+  <rect width="1200" height="260" rx="18" fill="url(#g)" />
+
+  <!-- Title -->
+  <text x="50%" y="105" text-anchor="middle"
+    font-size="42" fill="#e5e7eb"
+    font-family="Inter, Arial, sans-serif" font-weight="600">
+    {{TITLE_1}} — {{TITLE_2}}
+  </text>
+
+  <!-- Description -->
+  <text x="50%" y="145" text-anchor="middle"
+    font-size="18" fill="#9ca3af"
+    font-family="Inter, Arial, sans-serif">
+    {{REPO_TAGLINE}}
+  </text>
+
+  <!-- CTA -->
+  <text x="50%" y="185" text-anchor="middle"
+    font-size="18" fill="#93c5fd"
+    font-family="Inter, Arial, sans-serif" font-weight="500">
+    → {{CTA_TEXT}}
+  </text>
+</svg>
