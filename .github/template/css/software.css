@@ -67,7 +67,7 @@
 .dir > .label::before {
   content: "▸";
   display: inline-block;
-  width: 0.2em;
+  width: 1em;
   color: var(--muted);
 }
 
@@ -76,7 +76,7 @@
 }
 
 .children {
-  margin-left: 6px;
+  margin-left: 0px;
   display: none;
 }
 
