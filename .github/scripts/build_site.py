@@ -7,12 +7,34 @@ import sys
 import re, json, html
 import yaml
 
+def _load_yaml_file(p: Path) -> dict:
+    with p.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+def _merge_dicts(base: dict, extra: dict) -> dict:
+    out = dict(base or {})
+    for k, v in (extra or {}).items():
+        out[k] = v
+    return out
+
 def load_config(cfg_path: Path) -> dict:
-    """Lê o YAML com placeholders. Se HERO_URL não vier, monta de BASE+SUBDIR+FILE."""
+    """
+    Se cfg_path for arquivo: lê.
+    Se cfg_path for diretório: lê todos *.yml/*.yaml (recursivo) e mescla.
+    Depois aplica a regra do HERO_URL (BASE+SUBDIR+FILE).
+    """
     if not cfg_path or not cfg_path.exists():
         return {}
-    with cfg_path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
+
+    data = {}
+    if cfg_path.is_file():
+        data = _load_yaml_file(cfg_path)
+    else:
+        files = []
+        for pat in ("*.yml", "*.yaml"):
+            files.extend(sorted(cfg_path.rglob(pat)))
+        for f in files:
+            data = _merge_dicts(data, _load_yaml_file(f))
 
     if not data.get("HERO_URL"):
         base = (data.get("ASSETS_BASE") or "").rstrip("/")
@@ -20,8 +42,8 @@ def load_config(cfg_path: Path) -> dict:
         fil  = (data.get("HERO_FILE") or "").lstrip("/")
         if base and fil:
             data["HERO_URL"] = "/".join(p for p in [base, sub, fil] if p)
-    return data
 
+    return data
 
 # ============================= Helpers =============================
 

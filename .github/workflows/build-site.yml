@@ -23,7 +23,7 @@ on:
         type: string
         required: false
         default: "main" # default em uso!
-      repo_cfg_path:
+      placeholders_path:
         type: string
         required: true
 
@@ -121,7 +121,7 @@ jobs:
             --out site \
             --template template \
             --title "${{ inputs.site_title }}" \
-            --cfg .github/scripts/repo.yml \
+            --cfg "${{ inputs.placeholders_path }}" \
             --execute ${{ inputs.execute }}
 
       # 8) Diagnóstico opcional

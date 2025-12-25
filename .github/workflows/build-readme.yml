@@ -10,7 +10,7 @@ on:
         type: string
         required: false
         default: "Academic-Codex/academic-codex.github.io"
-      repo_cfg_path:
+      placeholders_path:
         type: string
         required: true
       template_ref:
@@ -53,7 +53,7 @@ jobs:
           python central/.github/scripts/build_readme.py \
             --repo . \
             --central "central/${{ env.README_TEMPLATE_PATH }}" \
-            --repo-cfg "${{ inputs.repo_cfg_path }}"
+            --repo-cfg "${{ inputs.placeholders_path }}"
 
       - name: Commit changes (if any)
         run: |
