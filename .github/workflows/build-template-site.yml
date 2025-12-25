@@ -43,8 +43,8 @@ jobs:
       - name: Checkout discipline repo
         uses: actions/checkout@v4
 
-      # 2) Checkout do repositório central (template/scripts)
-      - name: Checkout central (template/scripts)
+      # 2) Checkout do repositório central (template e scripts)
+      - name: Checkout central (template e scripts)
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.template_repo }}
