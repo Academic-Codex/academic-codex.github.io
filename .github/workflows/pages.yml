@@ -4,6 +4,22 @@ name: Build & Deploy Jekyll
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - ".github/**"
+      - "scripts/**"
+      - ".vscode/**"
+      - ".devcontainer/**"
+      - "**/*.ipynb"
+      - "**/*.py"
+      - "**/*.java"
+      - "**/*.sh"
+      - "**/*.zsh"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.md"
+      - "README.md"
   workflow_dispatch:
 
 permissions:
