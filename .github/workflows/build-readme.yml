@@ -38,7 +38,7 @@ jobs:
           repository: ${{ inputs.template_repo }}
           ref: ${{ inputs.template_ref }}
           path: central
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
