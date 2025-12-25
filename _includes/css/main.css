@@ -577,3 +577,18 @@ header > img{
   white-space: nowrap;
   cursor: default;
 }
+
+/* ===== Brand Logos ===== */
+.brand-logos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;               /* espaçamento entre logos */
+  padding: 10px 15px;
+}
+
+.brand-logo {
+  display: inline-block;
+  height: 32px;
+  width: auto;
+  vertical-align: middle;
+}
