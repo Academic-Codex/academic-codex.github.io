@@ -1,0 +1,87 @@
+name: Notify disciplines on readme template change
+
+env:
+  GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/readme/**'
+
+jobs:
+  notify:
+    if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Informa alteração do template
+        env:
+          ORG: Academic-Codex
+          EXCLUDE_REPO: academic-codex.github.io
+          EVENT_TYPE: readme-template-updated
+        run: |
+          set -euo pipefail
+
+          echo "Repositórios da organização academic-codex: $ORG"
+
+          page=1
+          repos_tmp="$(mktemp)"
+
+          while :; do
+            json="$(curl -sS \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/orgs/$ORG/repos?per_page=100&page=$page")"
+
+            count="$(echo "$json" | jq 'length')"
+            if [ "$count" -eq 0 ]; then
+              break
+            fi
+
+            # pega full_name dos repos não arquivados e exclui o repo da homepage
+            echo "$json" | jq -r --arg org "$ORG" --arg excl "$EXCLUDE_REPO" '
+              .[]
+              | select(.archived == false)
+              | select(.name != $excl)
+              | .full_name
+            ' >> "$repos_tmp"
+
+            page=$((page + 1))
+          done
+
+          # Remove duplicados e ordena
+          sort -u "$repos_tmp" > "$repos_tmp.sorted"
+
+          total="$(wc -l < "$repos_tmp.sorted" | tr -d ' ')"
+          echo "Total de repos para dispatch: $total"
+
+          echo "— Primeiros 20 repos (debug):"
+          head -n 20 "$repos_tmp.sorted" | sed 's/^/  - /'
+
+          # (Opcional) descomente se quiser imprimir TODOS (pode poluir logs)
+          # echo "— Lista completa (debug):"
+          # cat "$repos_tmp.sorted" | sed 's/^/  - /'
+
+          echo "Disparando repository_dispatch ($EVENT_TYPE)..."
+          ok=0
+          fail=0
+
+          while IFS= read -r repo; do
+            [ -z "$repo" ] && continue
+            echo "-> $repo"
+
+            http="$(curl -sS -o /dev/null -w "%{http_code}" -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$repo/dispatches" \
+              -d "{\"event_type\":\"$EVENT_TYPE\"}")"
+
+            if [ "$http" -ge 200 ] && [ "$http" -lt 300 ]; then
+              ok=$((ok + 1))
+            else
+              fail=$((fail + 1))
+              echo "  falhou (HTTP $http) em $repo"
+            fi
+          done < "$repos_tmp.sorted"
+
+          echo "Resultado: ok=$ok fail=$fail total=$total"

@@ -1,4 +1,4 @@
-name: Notify disciplines on template change
+name: Notify disciplines on site template change
 
 env:
   GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
@@ -26,7 +26,7 @@ jobs:
         env:
           ORG: Academic-Codex
           EXCLUDE_REPO: academic-codex.github.io
-          EVENT_TYPE: template-updated
+          EVENT_TYPE: site-template-updated
         run: |
           set -euo pipefail
 

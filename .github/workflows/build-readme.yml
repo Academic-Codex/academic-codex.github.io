@@ -1,0 +1,56 @@
+name: Build README (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      template_ref:
+        type: string
+        required: false
+        default: main
+    secrets:
+      GH_TOKEN:
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+
+      - name: Checkout central templates
+        uses: actions/checkout@v4
+        with:
+          repository: Academic-Codex/academic-codex.github.io
+          ref: ${{ inputs.template_ref }}
+          path: central
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Build README + SVGs
+        run: |
+          python central/.github/scripts/build_readme.py \
+            --repo . \
+            --central central/.github/readme
+
+      - name: Commit changes (if any)
+        run: |
+          if git diff --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md .github/readme || true
+          git commit -m "chore(readme): auto-generate README + banners"
+          git push

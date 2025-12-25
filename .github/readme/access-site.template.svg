@@ -1,0 +1,42 @@
+<svg width="1200" height="160" viewBox="0 0 1200 160"
+    xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0b1220" />
+            <stop offset="100%" stop-color="#111827" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect width="1200" height="160" rx="14" fill="url(#bg)" />
+
+    <!-- Main text -->
+    <text x="50%" y="60"
+        text-anchor="middle"
+        font-size="28"
+        fill="#e5e7eb"
+        font-family="Inter, Arial, sans-serif"
+        font-weight="500">
+        Explore the full course website
+    </text>
+
+    <!-- Subtitle -->
+    <text x="50%" y="95"
+        text-anchor="middle"
+        font-size="16"
+        fill="#9ca3af"
+        font-family="Inter, Arial, sans-serif">
+        lectures • notebooks • references • interactive material
+    </text>
+
+    <!-- Call to action -->
+    <text x="50%" y="125"
+        text-anchor="middle"
+        font-size="16"
+        fill="#93c5fd"
+        font-family="Inter, Arial, sans-serif">
+        → PGF5002-Mecanica-Quantica-II
+    </text>
+
+</svg>
