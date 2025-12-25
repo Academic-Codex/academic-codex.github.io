@@ -22,7 +22,7 @@ on:
       template_ref:
         type: string
         required: false
-        default: "v1" # default em uso!
+        default: "main" # default em uso!
       repo_cfg_path:
         type: string
         required: true
