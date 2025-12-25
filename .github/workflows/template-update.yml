@@ -87,7 +87,7 @@ jobs:
               ok=$((ok + 1))
             else
               fail=$((fail + 1))
-              echo "   ⚠️ falhou (HTTP $http) em $repo"
+              echo "  falhou (HTTP $http) em $repo"
             fi
           done < "$repos_tmp.sorted"
 
