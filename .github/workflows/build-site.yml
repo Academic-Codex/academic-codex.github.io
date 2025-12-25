@@ -24,6 +24,10 @@ on:
         type: string
         required: false
         default: ".github/template"
+      repo_cfg_path:
+        type: string
+        required: false
+        default: ".github/scripts/repo.yml"
 
 permissions:
   contents: write
