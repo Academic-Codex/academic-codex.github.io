@@ -9,6 +9,7 @@ on:
     paths:
       - '.github/template/**'   
       - '.github/scripts/**'   
+      - 'img/**'   
   # (opcional) se quiser cobrir merges de PRs também:
   pull_request:
     types: [closed]
