@@ -88,30 +88,55 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
+          # mesma base que você já usa
           BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
+          # lê um ARQUIVO ou um DIRETÓRIO e mescla todos yml/yaml
           python - <<'PY' > hero_relpath.txt
-          import yaml, sys
+          import sys, yaml
           from pathlib import Path
-          p = Path(".github/scripts/repo.yml")
-          d = {}
-          if p.exists():
-              d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
-          sub = (d.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
-          fil = (d.get("HERO_FILE") or "").strip("/")
+
+          cfg_path = Path("${{ inputs.repo_cfg_path }}")  # pode ser arquivo OU diretório
+          data = {}
+
+          def merge(d):
+            if not d: return
+            for k,v in d.items():
+              data[k] = v
+
+          if cfg_path.exists():
+            if cfg_path.is_file():
+              merge(yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {})
+            else:
+              for p in sorted(list(cfg_path.rglob("*.yml")) + list(cfg_path.rglob("*.yaml"))):
+                merge(yaml.safe_load(p.read_text(encoding="utf-8")) or {})
+
+          sub = (data.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
+          fil = (data.get("HERO_FILE") or "").strip("/")
+
+          # não mata o build se não tiver hero (só pula)
           if not fil:
-              sys.exit("HERO_FILE ausente em .github/scripts/repo.yml")
+            print("")
+            sys.exit(0)
+
           print(f"{sub}/{fil}")
           PY
 
-          HERO_REL=$(cat hero_relpath.txt)
+          HERO_REL="$(cat hero_relpath.txt || true)"
+          if [ -z "$HERO_REL" ]; then
+            echo "Sem HERO_FILE → pulando download da hero."
+            exit 0
+          fi
+
           HERO_URL="$BASE_RAW/$HERO_REL"
           echo "Baixando hero: $HERO_URL"
 
-          mkdir -p template/assets
+          mkdir -p template/assets/img
           curl -fsSL "$HERO_URL" -o template/assets/img/hero.png
 
           sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g' template/index.html
+
 
       # 7) Constrói o site (usa o script do central)
       - name: Build site
