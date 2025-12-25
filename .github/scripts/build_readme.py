@@ -79,7 +79,6 @@ def parse_args(argv):
     if repo_cfg is None:
         # default: diretório padrão
         repo_cfg = repo_root / ".github" / "scripts"
-
     return repo_root, central_readme, repo_cfg
 
 def main():
