@@ -9,7 +9,7 @@ on:
     paths:
       - '.github/templates/site/**'   
       - '.github/scripts/build_site.py' 
-      - '.github/jobs/build-site.yml'  
+      - '.github/workflows/build-site.yml'  
       - 'img/**'   
 
 jobs:

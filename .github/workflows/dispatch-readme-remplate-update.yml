@@ -9,7 +9,7 @@ on:
     paths:
       - '.github/templates/readme/**' 
       - '.github/scripts/build_readme.py'
-      - '.github/jobs/build-readme.yml'
+      - '.github/workflows/build-readme.yml'
 
 jobs:
   notify:
