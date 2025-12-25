@@ -19,7 +19,7 @@ on:
       template_ref:
         type: string
         required: false
-        default: "v1"
+        default: "v1" #está usando este default!
       template_path:
         type: string
         required: false

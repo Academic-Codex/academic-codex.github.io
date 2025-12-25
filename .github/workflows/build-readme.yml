@@ -3,16 +3,28 @@ name: Build README (Reusable)
 on:
   workflow_call:
     inputs:
+      template_repo:
+        type: string
+        required: false
+        default: "Academic-Codex/academic-codex.github.io"
       template_ref:
         type: string
         required: false
-        default: main
-    secrets:
-      GH_TOKEN:
-        required: true
+        default: "v1" #está usando este default!
+      template_path:
+        type: string
+        required: false
+        default: ".github/readme"
+      repo_cfg_path:
+        type: string
+        required: false
+        default: ".github/scripts/repo.yml"
 
 permissions:
   contents: write
+
+concurrency:
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -24,7 +36,7 @@ jobs:
       - name: Checkout central templates
         uses: actions/checkout@v4
         with:
-          repository: Academic-Codex/academic-codex.github.io
+          repository: ${{ inputs.template_repo }}
           ref: ${{ inputs.template_ref }}
           path: central
           token: ${{ secrets.GH_TOKEN }}
