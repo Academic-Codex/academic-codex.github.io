@@ -55,7 +55,27 @@ def ensure_defaults(cfg: dict) -> dict:
     cfg.setdefault("TEXT_MUTED", "#9ca3af")
     cfg.setdefault("ACCENT", "#93c5fd")
     cfg.setdefault("CARD_RADIUS", "18")
+
+    # tema
+    cfg.setdefault("THEME", "")  # ex: board, coding
+    cfg.setdefault("THEME_ASSET", "")  # vamos preencher depois
     return cfg
+
+def _pick_theme_asset(central_readme: Path, theme: str) -> Path | None:
+    """
+    Procura central/.github/templates/readme/assets/<theme>.(webp|gif|png|jpg|jpeg)
+    Retorna Path ou None.
+    """
+    if not theme:
+        return None
+    assets_dir = central_readme / "assets"
+    exts = (".webp", ".gif", ".png", ".jpg", ".jpeg")
+    for ext in exts:
+        p = assets_dir / f"{theme}{ext}"
+        if p.exists():
+            return p
+    return None
+
 
 _TOKEN = re.compile(r"\{\{\s*([A-Z0-9_]+)\s*\}\}")
 
@@ -88,24 +108,31 @@ def parse_args(argv):
     return repo_root, central_readme, repo_cfg
 
 def main():
-    """
-    Ex:
-      build_readme.py --repo . --central central/.github/templates/readme --repo-cfg .github/scripts
-      build_readme.py --repo . --central central/.github/templates/readme --repo-cfg .github/scripts/readme.yml
-    """
     repo_root, central_readme, repo_cfg = parse_args(sys.argv[1:])
-
     cfg = load_placeholders(repo_cfg, recursive=True)
     cfg = ensure_defaults(cfg)
 
     assets_dir = repo_root / cfg["ASSETS_DIR"]
     assets_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1) copiar assets estáticos (se existirem no central)
-    for static_name in ["her.webp"]:
-        src = central_readme / static_name
-        if src.exists():
-            shutil.copy2(src, assets_dir / static_name)
+    # 1) THEME -> copia asset escolhido (webp ou gif etc.) e injeta placeholder
+    theme = str(cfg.get("THEME", "")).strip()
+    theme_src = _pick_theme_asset(central_readme, theme)
+
+    if theme_src is not None:
+        # salva como theme.<ext> no repo (não força .png)
+        dst_name = f"theme{theme_src.suffix.lower()}"
+        dst = assets_dir / dst_name
+        shutil.copy2(theme_src, dst)
+
+        # path relativo que você usa nos templates
+        cfg["THEME_ASSET"] = f"{cfg['ASSETS_DIR'].rstrip('/')}/{dst_name}".replace("\\", "/")
+    else:
+        # fallback legado: her.webp (se existir)
+        legacy = central_readme / "her.webp"
+        if legacy.exists():
+            shutil.copy2(legacy, assets_dir / "her.webp")
+            cfg["THEME_ASSET"] = f"{cfg['ASSETS_DIR'].rstrip('/')}/her.webp".replace("\\", "/")
 
     # 2) gerar SVGs
     svg_templates = {
@@ -129,6 +156,7 @@ def main():
     print(f"     README: {repo_root / cfg['README_OUT']}")
     print(f"     Assets: {assets_dir}")
     print(f"     Placeholders: {repo_cfg}")
+    print(f"     THEME: {theme} -> {cfg.get('THEME_ASSET','') or '(none)'}")
 
 if __name__ == "__main__":
     main()
