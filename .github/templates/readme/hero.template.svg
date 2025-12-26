@@ -1,42 +1,56 @@
 <svg width="1200" height="260" viewBox="0 0 1200 260" xmlns="http://www.w3.org/2000/svg">
     <defs>
         <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stop-color="#0b1220" />
-            <stop offset="100%" stop-color="#111827" />
+            <stop offset="0%" stop-color="{{BG_1}}" />
+            <stop offset="100%" stop-color="{{BG_2}}" />
         </linearGradient>
     </defs>
 
     <!-- Card -->
-    <rect width="1200" height="260" rx="18" fill="url(#g)" />
+    <rect
+        width="1200"
+        height="260"
+        rx="{{CARD_RADIUS}}"
+        fill="url(#g)"
+    />
 
     <!-- Title -->
-    <text x="50%" y="105"
+    <text
+        x="50%"
+        y="105"
         text-anchor="middle"
         font-size="42"
         font-family="Inter, Arial, sans-serif"
-        font-weight="600">
-        <tspan fill="#e5e7eb">
+        font-weight="600"
+    >
+        <tspan fill="{{TEXT_MAIN}}">
             {{TITLE_1}} — {{TITLE_2}}
         </tspan>
     </text>
 
     <!-- Description -->
-    <text x="50%" y="145"
+    <text
+        x="50%"
+        y="145"
         text-anchor="middle"
         font-size="18"
-        font-family="Inter, Arial, sans-serif">
-        <tspan fill="#9ca3af">
+        font-family="Inter, Arial, sans-serif"
+    >
+        <tspan fill="{{TEXT_MUTED}}">
             {{REPO_TAGLINE}}
         </tspan>
     </text>
 
     <!-- CTA -->
-    <text x="50%" y="185"
+    <text
+        x="50%"
+        y="185"
         text-anchor="middle"
         font-size="18"
         font-family="Inter, Arial, sans-serif"
-        font-weight="500">
-        <tspan fill="#93c5fd">
+        font-weight="500"
+    >
+        <tspan fill="{{ACCENT}}">
             → {{CTA_TEXT}}
         </tspan>
     </text>

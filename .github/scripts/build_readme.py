@@ -46,10 +46,15 @@ def ensure_defaults(cfg: dict) -> dict:
     cfg.setdefault("ASSETS_DIR", ".github/readme")
     cfg.setdefault("README_OUT", "README.md")
     cfg.setdefault("REPO_TAGLINE", "lectures • notebooks • references")
-    cfg.setdefault("BANNER_ACCESS_TITLE", "Explore the full course website")
-    cfg.setdefault("BANNER_ACCESS_SUBTITLE", "lectures • notebooks • references • interactive material")
-    cfg.setdefault("BANNER_ACCESS_CTA", "Access the site →")
-    cfg.setdefault("CTA_TEXT", cfg.get("BANNER_ACCESS_CTA", "Access the site →"))  # opcional
+    cfg.setdefault("CTA_TEXT", cfg.get("BANNER_ACCESS_CTA", "Access the site →"))
+
+    # defaults de paleta
+    cfg.setdefault("BG_1", "#0b1220")
+    cfg.setdefault("BG_2", "#111827")
+    cfg.setdefault("TEXT_MAIN", "#e5e7eb")
+    cfg.setdefault("TEXT_MUTED", "#9ca3af")
+    cfg.setdefault("ACCENT", "#93c5fd")
+    cfg.setdefault("CARD_RADIUS", "18")
     return cfg
 
 _TOKEN = re.compile(r"\{\{\s*([A-Z0-9_]+)\s*\}\}")
