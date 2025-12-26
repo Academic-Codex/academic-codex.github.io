@@ -1,6 +1,6 @@
 ---
-title: "4302304 Mecânica Quântica II"
-link: /IF4302304-Mecanica-Quantica-II
+title: "4302404 Mecânica Quântica II"
+link: /IF4302404-Mecanica-Quantica-II
 category: undergrad
 area: fisica
 layout: default
