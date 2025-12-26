@@ -49,12 +49,12 @@ def ensure_defaults(cfg: dict) -> dict:
     cfg.setdefault("CTA_TEXT", cfg.get("BANNER_ACCESS_CTA", "Access the site →"))
 
     # defaults de paleta
-    cfg.setdefault("BG_1", "#0b1220")
-    cfg.setdefault("BG_2", "#111827")
-    cfg.setdefault("TEXT_MAIN", "#e5e7eb")
-    cfg.setdefault("TEXT_MUTED", "#9ca3af")
-    cfg.setdefault("ACCENT", "#93c5fd")
-    cfg.setdefault("CARD_RADIUS", "18")
+    cfg.setdefault("BG_1", "#000000")
+    cfg.setdefault("BG_2", "#000000")
+    cfg.setdefault("TEXT_MAIN", "#303030")
+    cfg.setdefault("TEXT_MUTED", "#555555")
+    cfg.setdefault("ACCENT", "#222222")
+    cfg.setdefault("CARD_RADIUS", "30")
 
     # tema
     cfg.setdefault("THEME", "")  # ex: board, coding
