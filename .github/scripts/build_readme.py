@@ -120,23 +120,22 @@ def main():
     assets_dir.mkdir(parents=True, exist_ok=True)
 
     # 1) THEME -> copia asset escolhido (webp ou gif etc.) e injeta placeholder
-    theme = str(cfg.get("THEME", "")).strip()
-    theme_src = _pick_theme_asset(central_readme, theme)
-
-    if theme_src is not None:
-        # salva como theme.<ext> no repo (não força .png)
-        dst_name = f"theme{theme_src.suffix.lower()}"
-        dst = assets_dir / dst_name
-        shutil.copy2(theme_src, dst)
-
-        # path relativo que você usa nos templates
-        cfg["THEME_ASSET"] = f"{cfg['ASSETS_DIR'].rstrip('/')}/{dst_name}".replace("\\", "/")
+    theme = (cfg.get("THEME") or "").strip()
+    if theme:
+        candidates = [
+            central_readme / "assets" / f"{theme}.webp",
+            central_readme / "assets" / f"{theme}.gif",
+        ]
+        src = next((c for c in candidates if c.exists()), None)
+        if src:
+            out_name = f"theme{src.suffix.lower()}"
+            shutil.copy2(src, assets_dir / out_name)
+            cfg["THEME_ASSET"] = f"{cfg['ASSETS_DIR'].rstrip('/')}/{out_name}"
+        else:
+            # opcional: deixar vazio ou um default
+            cfg.setdefault("THEME_ASSET", "")
     else:
-        # fallback legado: her.webp (se existir)
-        legacy = central_readme / "her.webp"
-        if legacy.exists():
-            shutil.copy2(legacy, assets_dir / "her.webp")
-            cfg["THEME_ASSET"] = f"{cfg['ASSETS_DIR'].rstrip('/')}/her.webp".replace("\\", "/")
+        cfg.setdefault("THEME_ASSET", "")
 
     # 2) gerar SVGs
     svg_templates = {

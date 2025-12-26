@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="{{ASSETS_DIR}}/her.webp" width="100%" />
+  <img src="{{THEME_ASSET}}" width="100%" />
 </p>
 
 <p align="center">
