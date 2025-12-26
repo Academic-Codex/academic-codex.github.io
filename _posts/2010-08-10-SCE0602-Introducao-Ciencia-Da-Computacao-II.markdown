@@ -1,6 +1,6 @@
 ---
-title: "SCE0600 Introdução Ciência Da Computação II"
-link: /SCE0600-Introducao-Ciencia-Da-Computacao-II
+title: "SCE0602 Introdução Ciência Da Computação II"
+link: /SCE0602-Introducao-Ciencia-Da-Computacao-II
 category: undergrad
 area: computacao
 layout: default
