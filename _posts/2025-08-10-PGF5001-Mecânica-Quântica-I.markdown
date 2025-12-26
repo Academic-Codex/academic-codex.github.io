@@ -1,6 +1,6 @@
 ---
-title: "PGF5001 Mecânica Quântica"
-link: /PGF5001-Mecanica-Quantica
+title: "PGF5001 Mecânica Quântica I"
+link: /PGF5001-Mecanica-Quantica-I
 category: grad
 area: fisica
 layout: default
