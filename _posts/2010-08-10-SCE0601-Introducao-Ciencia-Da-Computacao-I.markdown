@@ -1,6 +1,6 @@
 ---
 title: "SCE0601 Introdução Ciência Da Computação I"
-link: /SCE0601-Introducao-Ciencia-Da-Computacao
+link: /SCE0601-Introducao-Ciencia-Da-Computacao-I
 category: undergrad
 area: computacao
 layout: default
