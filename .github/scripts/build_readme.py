@@ -111,10 +111,32 @@ def parse_args(argv):
 
     return repo_root, central_readme, repo_cfg
 
+def inject_svg_build_attr(svg_text: str, cfg: dict) -> str:
+    """
+    Injeta data-build="{{TIMESTAMP}}" no <svg ...>
+    Se já existir, não duplica.
+    """
+    ts = cfg.get("TIMESTAMP", "")
+    if not ts:
+        return svg_text
+
+    # já tem data-build? não mexe
+    if "data-build=" in svg_text:
+        return svg_text
+
+    # tenta injetar no <svg ...>
+    return re.sub(
+        r"<svg\b",
+        f'<svg data-build="{ts}"',
+        svg_text,
+        count=1
+    )
+
 def main():
     repo_root, central_readme, repo_cfg = parse_args(sys.argv[1:])
     cfg = load_placeholders(repo_cfg, recursive=True)
     cfg = ensure_defaults(cfg)
+    cfg["TIMESTAMP"] = datetime.utcnow().isoformat() + "Z"
 
     assets_dir = repo_root / cfg["ASSETS_DIR"]
     assets_dir.mkdir(parents=True, exist_ok=True)
@@ -147,7 +169,9 @@ def main():
         tpath = central_readme / tname
         if not tpath.exists():
             continue
-        rendered = render_text(tpath.read_text(encoding="utf-8"), cfg)
+        raw = tpath.read_text(encoding="utf-8")
+        rendered = render_text(raw, cfg)
+        rendered = inject_svg_build_attr(rendered, cfg)
         (assets_dir / outname).write_text(rendered, encoding="utf-8")
 
     # 3) gerar README.md
