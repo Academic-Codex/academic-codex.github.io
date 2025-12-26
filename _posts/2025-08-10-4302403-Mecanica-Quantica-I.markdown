@@ -1,6 +1,6 @@
 ---
-title: "4302303 Mecânica Quântica I"
-link: /IF4302303-Mecanica-Quantica-I
+title: "4302403 Mecânica Quântica I"
+link: /IF4304303-Mecanica-Quantica-I
 category: undergrad
 area: fisica
 layout: default
