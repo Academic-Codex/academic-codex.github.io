@@ -1,6 +1,6 @@
-<p align="center">
+<!-- <p align="center">
   <img src="{{THEME_ASSET}}" width="100%" />
-</p>
+</p> -->
 
 <p align="center">
   <a href="{{SITE_URL}}">
