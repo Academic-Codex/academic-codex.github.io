@@ -6,6 +6,14 @@ on:
     paths:
       - "**/*.ipynb"
       - "references.yml"
+      - "**/*.md"
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.svg"
+      - "**/*.gif"
+      - "**/*.pdf"
+
   workflow_dispatch: {}
 
 jobs:
@@ -17,3 +25,5 @@ jobs:
       template_ref: "main"
     permissions:
       contents: write
+      pages: write
+      id-token: write

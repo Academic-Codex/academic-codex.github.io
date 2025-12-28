@@ -1,0 +1,21 @@
+name: Update README
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "readme.yml"
+      - "repo.yml"
+      - "references.yml"
+      - "**/*.md"
+
+  workflow_dispatch: {}
+
+jobs:
+  readme:
+    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-readme.yml@main
+    with:
+      template_repo: "Academic-Codex/academic-codex.github.io"
+      template_ref: "main"
+    permissions:
+      contents: write
