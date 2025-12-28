@@ -1,0 +1,60 @@
+# Arquivos de Sistema
+.DS_Store
+.localized
+
+# Arquivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+.venv/**
+.venv/*
+.env
+pip-log.txt
+*.egg-info/
+.coverage
+
+# Arquivos de TeX/LaTeX
+*.aux
+*.bbl
+*.blg
+*.brf
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.dvi
+*.ps
+*.gz
+*.bak
+*.synctex.gz*
+*.fls
+*.fdb_latexmk
+*.lot
+*.lof
+*.bcf
+*.run.xml
+*.spl
+
+# Arquivos de editores
+*~
+# Vim
+*.swp
+*.swo
+# Emacs
+#*#
+#.#*
+# VS Code
+.vscode/
+
+# Arquivos de backup
+*.bak
+*.old
+*.orig
+
+# Folder
