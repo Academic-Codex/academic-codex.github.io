@@ -85,20 +85,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
-          FULL="${GITHUB_REPOSITORY}"   # ex: academic-codex/SEL0608-Eletromagnetismo
-          OWNER="${FULL%%/*}"
-          REPO="${FULL##*/}"
-
-          echo "OWNER=$OWNER" >> "$GITHUB_ENV"
-          echo "REPO=$REPO"   >> "$GITHUB_ENV"
-
           python - <<'PY'
-          import sys, yaml
+          import os, sys, yaml
           from pathlib import Path
 
-          owner = "${OWNER}"
-          repo  = "${REPO}"
+          full = os.environ.get("GITHUB_REPOSITORY", "")  # owner/repo
+          if "/" not in full:
+            print(f"[fatal] invalid GITHUB_REPOSITORY={full}", file=sys.stderr)
+            sys.exit(2)
+
+          owner, repo = full.split("/", 1)
 
           reg = Path("central/.github/registry/repos.yml")
           if not reg.exists():
@@ -111,31 +107,18 @@ jobs:
             print(f"[fatal] registry key 'repos' must be a list: {reg}", file=sys.stderr)
             sys.exit(2)
 
-          hit = None
-          for it in items:
-            if (it.get("org") == owner) and (it.get("name") == repo):
-              hit = it
-              break
-
+          hit = next((it for it in items if it.get("org") == owner and it.get("name") == repo), None)
           if not hit:
             print(f"[fatal] repo {owner}/{repo} not found in central registry: {reg}", file=sys.stderr)
             sys.exit(2)
 
-          # runtime default (não precisa estar no registry)
           site_url = hit.get("site_url") or f"https://{owner}.github.io/{repo}"
 
           out = {
-            # tokens básicos do template/site
             "TITLE": hit.get("title") or repo,
-
-            # seu registry flat:
             "HERO_FILE": hit.get("site_hero_image") or "",
-
-            # opcional: se você quiser usar no HTML
             "SUBTITLE": hit.get("site_subtitle") or "",
             "DESCRIPTION": hit.get("site_description") or "",
-
-            # útil pra links
             "SITE_URL": site_url,
             "GITHUB_URL": hit.get("github_url") or f"https://github.com/{owner}/{repo}",
           }
