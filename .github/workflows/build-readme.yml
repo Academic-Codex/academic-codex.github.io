@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: readme-${{ github.repository }}
+  group: "readme"
   cancel-in-progress: true
 
 jobs:
