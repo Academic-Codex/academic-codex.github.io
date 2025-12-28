@@ -94,7 +94,7 @@ jobs:
           echo "REPO=$REPO"   >> "$GITHUB_ENV"
 
           python - <<'PY'
-          import yaml, sys
+          import sys, yaml
           from pathlib import Path
 
           owner = "${OWNER}"
@@ -107,6 +107,9 @@ jobs:
 
           data = yaml.safe_load(reg.read_text(encoding="utf-8")) or {}
           items = data.get("repos", [])
+          if not isinstance(items, list):
+            print(f"[fatal] registry key 'repos' must be a list: {reg}", file=sys.stderr)
+            sys.exit(2)
 
           hit = None
           for it in items:
@@ -118,18 +121,23 @@ jobs:
             print(f"[fatal] repo {owner}/{repo} not found in central registry: {reg}", file=sys.stderr)
             sys.exit(2)
 
-          site = hit.get("site") or {}
+          # runtime default (não precisa estar no registry)
+          site_url = hit.get("site_url") or f"https://{owner}.github.io/{repo}"
 
           out = {
-            # tokens básicos
+            # tokens básicos do template/site
             "TITLE": hit.get("title") or repo,
 
-            # hero (se vazio, o workflow só pula)
-            "HERO_FILE": site.get("hero_image", ""),
+            # seu registry flat:
+            "HERO_FILE": hit.get("site_hero_image") or "",
 
-            # se você guardar heros em outra pasta no template central, ajuste aqui:
-            # ex: ".github/templates/site/assets/img/hero/<arquivo>"
-            "ASSETS_SUBDIR": (site.get("hero_subdir") or ".github/templates/site/assets/img/hero").strip("/"),
+            # opcional: se você quiser usar no HTML
+            "SUBTITLE": hit.get("site_subtitle") or "",
+            "DESCRIPTION": hit.get("site_description") or "",
+
+            # útil pra links
+            "SITE_URL": site_url,
+            "GITHUB_URL": hit.get("github_url") or f"https://github.com/{owner}/{repo}",
           }
 
           Path("_cfg").mkdir(exist_ok=True)
@@ -141,53 +149,37 @@ jobs:
           PY
 
       # 7) Baixa HERO_FILE do repositório central e injeta no template (opcional)
-      - name: Fetch hero image
+      - name: Fetch hero image (from central)
         shell: bash
         run: |
           set -euo pipefail
 
+          # onde as heros ficam no CENTRAL (ajuste 1 vez e acabou)
+          HERO_DIR_IN_CENTRAL="assets/img/hero"   # exemplo: dentro do repo central
+
           BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
-          python - <<'PY' > hero_relpath.txt
-          import sys, yaml
+          python - <<'PY' > hero_file.txt
+          import yaml
           from pathlib import Path
-
-          data = {}
-          cfg_path = Path("_cfg")
-
-          def merge(d):
-            if not d: return
-            for k,v in d.items():
-              data[k] = v
-
-          if cfg_path.exists():
-            for p in sorted(list(cfg_path.rglob("*.yml")) + list(cfg_path.rglob("*.yaml"))):
-              merge(yaml.safe_load(p.read_text(encoding="utf-8")) or {})
-
-          sub = (data.get("ASSETS_SUBDIR") or "").strip("/")
-          fil = (data.get("HERO_FILE") or "").strip("/")
-
-          if not fil:
-            print("")
-            sys.exit(0)
-
-          print(f"{sub}/{fil}" if sub else fil)
+          cfg = yaml.safe_load(Path("_cfg/site.yml").read_text(encoding="utf-8")) or {}
+          print((cfg.get("HERO_FILE") or "").strip())
           PY
 
-          HERO_REL="$(cat hero_relpath.txt || true)"
-          if [ -z "$HERO_REL" ]; then
+          HERO_FILE="$(cat hero_file.txt || true)"
+          if [ -z "$HERO_FILE" ]; then
             echo "Sem HERO_FILE → pulando download da hero."
             exit 0
           fi
 
-          HERO_URL="$BASE_RAW/$HERO_REL"
+          HERO_URL="$BASE_RAW/$HERO_DIR_IN_CENTRAL/$HERO_FILE"
           echo "Baixando hero: $HERO_URL"
 
           mkdir -p template/assets/img
           curl -fsSL "$HERO_URL" -o template/assets/img/hero.png
 
-          # Substitui token HERO_URL em todas as páginas do template (se existir)
-          find template -maxdepth 1 -name "*.html" -print0 | xargs -0 sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g'
+          # injeta no template (se você usa {{ HERO_URL }} no HTML)
+          sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g' template/index.html
 
       # 8) Constrói o site (usa o script do central)
       - name: Build site

@@ -1,4 +1,5 @@
-name: Build & Deploy repos README.md
+# .github/workflows/build-readme.yml
+name: Build & Deploy repos README.md (Reusable)
 
 env:
   README_TEMPLATE_PATH: ".github/templates/readme"
@@ -10,13 +11,10 @@ on:
         type: string
         required: false
         default: "Academic-Codex/academic-codex.github.io"
-      placeholders_path:
-        type: string
-        required: true
       template_ref:
         type: string
         required: false
-        default: "main" # default em uso!
+        default: "main"
 
 permissions:
   contents: write
@@ -28,17 +26,24 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout target repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Checkout central templates
+      - name: Checkout central templates + scripts + registry
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.template_repo }}
           ref: ${{ inputs.template_ref }}
           path: central
-          token: ${{ secrets.GITHUB_TOKEN }}
+          sparse-checkout: |
+            .github/templates/readme
+            .github/scripts/build_readme.py
+            .github/registry/repos.yml
+          sparse-checkout-cone-mode: false
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -46,23 +51,88 @@ jobs:
           python-version: "3.11"
 
       - name: Install deps
-        run: pip install pyyaml
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
 
+      # 1) Resolve cfg (readme.yml) from central registry
+      - name: Resolve README config from central registry
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          FULL="${GITHUB_REPOSITORY}"   # ex: academic-codex/SEL0608-Eletromagnetismo
+          OWNER="${FULL%%/*}"
+          REPO="${FULL##*/}"
+
+          python - <<'PY'
+          import sys, yaml
+          from pathlib import Path
+
+          owner = "${OWNER}"
+          repo  = "${REPO}"
+
+          reg = Path("central/.github/registry/repos.yml")
+          data = yaml.safe_load(reg.read_text(encoding="utf-8")) or {}
+          items = data.get("repos", [])
+          if not isinstance(items, list):
+            print(f"[fatal] registry repos must be a list: {reg}", file=sys.stderr)
+            sys.exit(2)
+
+          hit = None
+          for it in items:
+            if (it.get("org") == owner) and (it.get("name") == repo):
+              hit = it
+              break
+
+          if not hit:
+            print(f"[fatal] repo {owner}/{repo} not found in registry: {reg}", file=sys.stderr)
+            sys.exit(2)
+
+          # Defaults sensatos (runtime)
+          site_url = hit.get("site_url") or f"https://{owner}.github.io/{repo}"
+          assets_dir = hit.get("readme_assets_dir") or ".github/readme"
+
+          out = {
+            # tokens que seu template do readme costuma usar
+            "TITLE": hit.get("title") or repo,                 # opcional (se o template usa)
+            "REPO_TAGLINE": hit.get("readme_tagline") or "",
+            "CTA_TEXT": hit.get("readme_cta_text") or "Access the full course website",
+            "THEME": hit.get("readme_theme") or "coding",
+            "SITE_URL": site_url,
+            "ASSETS_DIR": assets_dir,
+          }
+
+          Path("_cfg").mkdir(exist_ok=True)
+          Path("_cfg/readme.yml").write_text(
+            yaml.safe_dump(out, sort_keys=False, allow_unicode=True),
+            encoding="utf-8"
+          )
+          print("[ok] wrote _cfg/readme.yml")
+          PY
+
+      # 2) Build README + SVGs
       - name: Build README + SVGs
         run: |
           python central/.github/scripts/build_readme.py \
             --repo . \
             --central "central/${{ env.README_TEMPLATE_PATH }}" \
-            --repo-cfg "${{ inputs.placeholders_path }}"
+            --repo-cfg "_cfg"
 
+      # 3) Commit changes (if any)
       - name: Commit changes (if any)
         run: |
           if git diff --quiet; then
             echo "No changes."
             exit 0
           fi
+
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add README.md .github/readme || true
-          git commit -m "Update files"
+
+          # adiciona só o que interessa, sem falhar se não existir
+          git add README.md || true
+          git add .github/readme || true
+
+          git commit -m "chore: update README assets"
           git push

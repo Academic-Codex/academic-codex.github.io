@@ -1,0 +1,57 @@
+# ============================================================
+# Academic Codex – Repository Registry (TEST SET)
+# Source of truth (editorial only, flat schema)
+# ============================================================
+
+repos:
+
+  # ------------------------------------------------
+  # Caso 1: disciplina padrão (site + README auto)
+  # ------------------------------------------------
+  - org: academic-codex
+    name: SEL0608-Eletromagnetismo
+    id: SEL0608
+    title: Eletromagnetismo
+    academic_level: undergrad
+    academic_area: Physics
+    academic_school: USP
+    site_hero_image: eletrodinamica.png
+    site_subtitle: Disciplina de graduação
+    site_description: Material de aula, notebooks e referências para Eletromagnetismo.
+    readme_tagline: Notas, listas e referências para SEL0608.
+    readme_cta_text: Access the full course website
+    readme_theme: coding
+
+  # ------------------------------------------------
+  # Caso 2: outra disciplina, mesmo fluxo
+  # ------------------------------------------------
+  - org: academic-codex
+    name: SSC0570-Empreendedores-Em-Informatica
+    id: SSC0570
+    title: Empreendedores em Informática
+    academic_level: undergrad
+    academic_area: Computer Science
+    academic_school: USP
+    site_hero_image: mecaninca-classica.png
+    site_subtitle: Disciplina interdisciplinar
+    site_description: Inovação, tecnologia e empreendedorismo em computação.
+    readme_tagline: Conteúdo e projetos da disciplina SSC0570.
+    readme_cta_text: Visit course website
+    readme_theme: startup
+
+  # ------------------------------------------------
+  # Caso 3: repo fictício (teste de criação)
+  # ------------------------------------------------
+  - org: academic-codex
+    name: TEST0001-Disciplina-Fantasma
+    id: TEST0001
+    title: Disciplina Fantasma
+    academic_level: undergrad
+    academic_area: Testing
+    academic_school: Academic Codex
+    site_hero_image: mecanica-quantica-i.png
+    site_subtitle: Disciplina de teste
+    site_description: Repositório fictício para validação da infraestrutura.
+    readme_tagline: Disciplina fantasma para testes de automação.
+    readme_cta_text: Open test website
+    readme_theme: minimal

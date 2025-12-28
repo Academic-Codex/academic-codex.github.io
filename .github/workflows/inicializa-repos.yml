@@ -1,0 +1,60 @@
+name: Inicializa repos (cria/injeta/publica)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Somente mostrar ações (sem alterar nada)"
+        required: true
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+      mode:
+        description: "Processar todos do registry ou somente um"
+        required: true
+        default: "all"
+        type: choice
+        options: ["all", "one"]
+      org:
+        description: "Org (usado quando mode=one)"
+        required: false
+        default: "academic-codex"
+      repo:
+        description: "Repo (usado quando mode=one)"
+        required: false
+        default: ""
+      force:
+        description: "Forçar re-publicar gh-pages mesmo se existir"
+        required: true
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout central repo
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml requests
+
+      - name: Run initializer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          MODE: ${{ inputs.mode }}
+          ONE_ORG: ${{ inputs.org }}
+          ONE_REPO: ${{ inputs.repo }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          python .github/scripts/repo_initializer.py
