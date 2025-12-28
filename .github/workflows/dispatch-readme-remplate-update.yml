@@ -1,7 +1,7 @@
 name: Notify repos readme's template updated
 
 env:
-  GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_WORKFLOWS }}
 
 on:
   push:
