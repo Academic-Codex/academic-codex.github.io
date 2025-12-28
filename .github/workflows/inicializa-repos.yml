@@ -1,28 +1,25 @@
-name: Inicializa repos (cria/injeta/publica)
+name: Inicializa repos (cria / injeta / publica)
 
 on:
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: "Somente mostrar ações (sem alterar nada)"
-        required: true
-        default: "false"
-        type: choice
-        options: ["false", "true"]
       mode:
         description: "Processar todos do registry ou somente um"
         required: true
         default: "all"
         type: choice
         options: ["all", "one"]
+
       org:
         description: "Org (usado quando mode=one)"
         required: false
         default: "academic-codex"
+
       repo:
         description: "Repo (usado quando mode=one)"
         required: false
         default: ""
+
       force:
         description: "Forçar re-publicar gh-pages mesmo se existir"
         required: true
@@ -35,29 +32,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ------------------------------------------------------------
+      # 1) Checkout do REPO CENTRAL (source of truth)
+      # ------------------------------------------------------------
       - name: Checkout central repo
         uses: actions/checkout@v4
+        with:
+          path: central
 
-      - name: Setup python
+      # ------------------------------------------------------------
+      # 2) Setup Python
+      # ------------------------------------------------------------
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # ------------------------------------------------------------
+      # 3) Dependências
+      # ------------------------------------------------------------
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pyyaml requests
+          pip install pyyaml requests
 
+      # ------------------------------------------------------------
+      # 4) Identidade Git (necessário para commits nos repos alvo)
+      # ------------------------------------------------------------
       - name: Configure git identity
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          
+      # ------------------------------------------------------------
+      # 5) Inicializador (EXECUTA DENTRO DO CENTRAL)
+      # ------------------------------------------------------------
       - name: Run initializer
+        working-directory: central
         env:
           GH_TOKEN: ${{ secrets.GH_WORKFLOWS }}
-          DRY_RUN: ${{ inputs.dry_run }}
           MODE: ${{ inputs.mode }}
           ONE_ORG: ${{ inputs.org }}
           ONE_REPO: ${{ inputs.repo }}
