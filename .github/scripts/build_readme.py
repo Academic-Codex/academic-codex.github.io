@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 from pathlib import Path
-import re, sys, shutil
+import re
+import sys
+import shutil
 from datetime import datetime
 import yaml
+
 
 def load_yaml_file(p: Path) -> dict:
     if not p.exists():
         raise FileNotFoundError(f"YAML não encontrado: {p}")
     return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+
 
 def merge_dicts(base: dict, extra: dict) -> dict:
     """Merge raso: chaves em extra sobrescrevem base."""
@@ -16,6 +22,7 @@ def merge_dicts(base: dict, extra: dict) -> dict:
         out[k] = v
     return out
 
+
 def load_placeholders(path_or_dir: Path, recursive: bool = True) -> dict:
     """
     Se for arquivo: carrega ele.
@@ -23,13 +30,15 @@ def load_placeholders(path_or_dir: Path, recursive: bool = True) -> dict:
     """
     p = path_or_dir
     if not p.exists():
-        raise FileNotFoundError(f"placeholders não encontrado: {p}")
+        raise FileNotFoundError(f"cfg/placeholders não encontrado: {p}")
 
+    # NOVO: arquivo -> usa direto (modo registry/_cfg)
     if p.is_file():
         return load_yaml_file(p)
 
     patterns = ("*.yml", "*.yaml")
-    files = []
+    files: list[Path] = []
+
     if recursive:
         for pat in patterns:
             files.extend(sorted(p.rglob(pat)))
@@ -37,23 +46,28 @@ def load_placeholders(path_or_dir: Path, recursive: bool = True) -> dict:
         for pat in patterns:
             files.extend(sorted(p.glob(pat)))
 
-    cfg = {}
+    cfg: dict = {}
     for f in files:
         cfg = merge_dicts(cfg, load_yaml_file(f))
 
-    print("[DBG] placeholder files:")
+    print("[DBG] cfg files:")
     for f in files:
         print("  -", f)
     return cfg
 
+
 def ensure_defaults(cfg: dict) -> dict:
     cfg = dict(cfg)
+
+    # paths
     cfg.setdefault("ASSETS_DIR", ".github/readme")
     cfg.setdefault("README_OUT", "README.md")
+
+    # textos
     cfg.setdefault("REPO_TAGLINE", "lectures • notebooks • references")
     cfg.setdefault("CTA_TEXT", cfg.get("BANNER_ACCESS_CTA", "Access the site →"))
 
-    # defaults de paleta
+    # defaults de paleta (se o template não setar)
     cfg.setdefault("BG_1", "#0b1220")
     cfg.setdefault("BG_2", "#111827")
     cfg.setdefault("TEXT_MAIN", "#e5e7eb")
@@ -62,9 +76,11 @@ def ensure_defaults(cfg: dict) -> dict:
     cfg.setdefault("CARD_RADIUS", "18")
 
     # tema
-    cfg.setdefault("THEME", "")  # ex: board, coding
-    cfg.setdefault("THEME_ASSET", "")  # vamos preencher depois
+    cfg.setdefault("THEME", "")         # ex: board, coding
+    cfg.setdefault("THEME_ASSET", "")   # preenchido depois
+
     return cfg
+
 
 def _pick_theme_asset(central_readme: Path, theme: str) -> Path | None:
     """
@@ -84,33 +100,43 @@ def _pick_theme_asset(central_readme: Path, theme: str) -> Path | None:
 
 _TOKEN = re.compile(r"\{\{\s*([A-Z0-9_]+)\s*\}\}")
 
+
 def render_text(template: str, cfg: dict) -> str:
     return _TOKEN.sub(lambda m: str(cfg.get(m.group(1), "")), template)
 
+
 def parse_args(argv):
     repo_root = Path(".").resolve()
-    central_readme = None
-    repo_cfg = None
+    central_readme: Path | None = None
+    cfg_path: Path | None = None
 
-    it = iter(range(len(argv)))
     i = 0
     while i < len(argv):
         a = argv[i]
         if a == "--repo":
-            repo_root = Path(argv[i+1]).resolve(); i += 2; continue
+            repo_root = Path(argv[i + 1]).resolve()
+            i += 2
+            continue
         if a == "--central":
-            central_readme = Path(argv[i+1]).resolve(); i += 2; continue
-        if a in ("--repo-cfg", "--placeholders", "--placeholders-path"):
-            repo_cfg = Path(argv[i+1]).resolve(); i += 2; continue
+            central_readme = Path(argv[i + 1]).resolve()
+            i += 2
+            continue
+        # NOVO: --cfg é o nome “novo”, mas mantém compatibilidade com os antigos
+        if a in ("--cfg", "--repo-cfg", "--placeholders", "--placeholders-path"):
+            cfg_path = Path(argv[i + 1]).resolve()
+            i += 2
+            continue
         i += 1
 
     if central_readme is None:
         raise SystemExit("Faltou --central <path para templates do readme no central>")
-    if repo_cfg is None:
-        # default: diretório padrão
-        repo_cfg = repo_root / ".github" / "scripts"
 
-    return repo_root, central_readme, repo_cfg
+    if cfg_path is None:
+        # default antigo: diretório padrão (fallback)
+        cfg_path = repo_root / ".github" / "scripts"
+
+    return repo_root, central_readme, cfg_path
+
 
 def inject_svg_build_attr(svg_text: str, cfg: dict) -> str:
     """
@@ -121,41 +147,32 @@ def inject_svg_build_attr(svg_text: str, cfg: dict) -> str:
     if not ts:
         return svg_text
 
-    # já tem data-build? não mexe
     if "data-build=" in svg_text:
         return svg_text
 
-    # tenta injetar no <svg ...>
-    return re.sub(
-        r"<svg\b",
-        f'<svg data-build="{ts}"',
-        svg_text,
-        count=1
-    )
+    return re.sub(r"<svg\b", f'<svg data-build="{ts}"', svg_text, count=1)
+
 
 def main():
-    repo_root, central_readme, repo_cfg = parse_args(sys.argv[1:])
-    cfg = load_placeholders(repo_cfg, recursive=True)
+    repo_root, central_readme, cfg_path = parse_args(sys.argv[1:])
+
+    # NOVO: se for arquivo, usa como truth; se for diretório, mantém comportamento antigo
+    cfg = load_placeholders(cfg_path, recursive=True)
     cfg = ensure_defaults(cfg)
     cfg["TIMESTAMP"] = datetime.utcnow().isoformat() + "Z"
 
     assets_dir = repo_root / cfg["ASSETS_DIR"]
     assets_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1) THEME -> copia asset escolhido (webp ou gif etc.) e injeta placeholder
+    # 1) THEME -> copia asset escolhido e injeta placeholder THEME_ASSET
     theme = (cfg.get("THEME") or "").strip()
     if theme:
-        candidates = [
-            central_readme / "assets" / f"{theme}.webp",
-            central_readme / "assets" / f"{theme}.gif",
-        ]
-        src = next((c for c in candidates if c.exists()), None)
+        src = _pick_theme_asset(central_readme, theme)
         if src:
             out_name = f"theme{src.suffix.lower()}"
             shutil.copy2(src, assets_dir / out_name)
             cfg["THEME_ASSET"] = f"{cfg['ASSETS_DIR'].rstrip('/')}/{out_name}"
         else:
-            # opcional: deixar vazio ou um default
             cfg.setdefault("THEME_ASSET", "")
     else:
         cfg.setdefault("THEME_ASSET", "")
@@ -176,15 +193,20 @@ def main():
         (assets_dir / outname).write_text(rendered, encoding="utf-8")
 
     # 3) gerar README.md
-    readme_template = (central_readme / "README.template.md").read_text(encoding="utf-8")
+    readme_template_path = central_readme / "README.template.md"
+    if not readme_template_path.exists():
+        raise FileNotFoundError(f"README.template.md não encontrado em: {readme_template_path}")
+
+    readme_template = readme_template_path.read_text(encoding="utf-8")
     rendered_readme = render_text(readme_template, cfg)
     (repo_root / cfg["README_OUT"]).write_text(rendered_readme, encoding="utf-8")
 
     print("[OK] README e SVGs gerados.")
     print(f"     README: {repo_root / cfg['README_OUT']}")
     print(f"     Assets: {assets_dir}")
-    print(f"     Placeholders: {repo_cfg}")
+    print(f"     CFG: {cfg_path}")
     print(f"     THEME: {theme} -> {cfg.get('THEME_ASSET','') or '(none)'}")
+
 
 if __name__ == "__main__":
     main()

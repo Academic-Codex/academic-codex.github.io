@@ -190,21 +190,21 @@ def collect_tree(src: Path, out: Path, execute: bool):
 def build_static_site(src: Path, out: Path, template_dir: Path, title: str, execute: bool, cfg: dict | None):
     tree, nb_count = collect_tree(src, out, execute)
 
-    # carregar refs do repo e colocar no cfg para render_tokens
-    refs = load_references(src)  # references.yml no root do repo
+    # === NOVO: carregar refs do repo e colocar no cfg para render_tokens ===
+    refs = load_references(src)  # assumes references.yml no root do repo (src)
     refs_html = render_references_html(refs)
     cfg = dict(cfg or {})
     cfg["REFERENCIAS"] = refs_html
+    
+    tree, nb_count = collect_tree(src, out, execute)
 
     out.mkdir(parents=True, exist_ok=True)
-
     pages = [
-        ("index.html", False),
-        ("software.html", True),
+        ("index.html", False),     # Home
+        ("software.html", True),   # Software (com árvore)
         ("publications.html", False),
         ("research.html", False),
     ]
-
     for fname, needs_tree in pages:
         page_path = template_dir / fname
         if not page_path.exists():
