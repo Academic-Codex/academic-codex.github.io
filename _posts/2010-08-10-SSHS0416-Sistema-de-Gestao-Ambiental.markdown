@@ -1,6 +1,6 @@
 ---
-title: "SEP0527 Gestão Ambiental"
-link: /SEP0527-Gestao-Ambiental
+title: "SHS0416 Sistema de Gestao Ambiental"
+link: /SHS0416-Sistema-de-Gestao-Ambiental
 category: undergrad
 area: empreendedorismo
 layout: default
