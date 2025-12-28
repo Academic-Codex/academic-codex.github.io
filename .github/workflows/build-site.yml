@@ -2,6 +2,7 @@ name: Build & Deploy repos Site
 
 env:
   SITE_TEMPLATE_PATH: ".github/templates/site"
+  ASSETS_IMG_HERO: "img/portifolio"
 
 on:
   workflow_call:

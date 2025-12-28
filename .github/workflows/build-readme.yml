@@ -61,7 +61,7 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import sys, yaml
+          import os, sys, yaml
           from pathlib import Path
 
           full = os.environ.get("GITHUB_REPOSITORY", "")
