@@ -1,4 +1,4 @@
-name: Build & Deploy Site
+name: Build & Deploy repos Site
 
 env:
   SITE_TEMPLATE_PATH: ".github/templates/site"
