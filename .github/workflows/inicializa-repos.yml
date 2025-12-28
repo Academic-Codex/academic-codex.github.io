@@ -56,7 +56,7 @@ jobs:
           
       - name: Run initializer
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
           DRY_RUN: ${{ inputs.dry_run }}
           MODE: ${{ inputs.mode }}
           ONE_ORG: ${{ inputs.org }}
