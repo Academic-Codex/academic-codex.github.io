@@ -1,4 +1,4 @@
-name: Inicializa repos (cria / injeta / publica)
+name: Inicializa repos
 
 on:
   workflow_dispatch:
