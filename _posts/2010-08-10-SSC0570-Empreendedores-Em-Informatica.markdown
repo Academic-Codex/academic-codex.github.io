@@ -1,6 +1,6 @@
 ---
-title: "SEP0527 Empreendedores Em Informática"
-link: /SEP0527-Empreendedores-Em-Informatica
+title: "SSC0570 Empreendedores Em Informática"
+link: /SSC0570-Empreendedores-Em-Informatica
 category: undergrad
 area: empreendedorismo
 layout: default
