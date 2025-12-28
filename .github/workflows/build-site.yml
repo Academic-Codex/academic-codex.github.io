@@ -25,8 +25,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
@@ -37,12 +35,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout do repositório da disciplina (consumidor)
       - name: Checkout discipline repo
         uses: actions/checkout@v4
 
-      # 2) Checkout do repositório central (template e scripts + registry)
-      - name: Checkout central (template e scripts)
+      - name: Checkout central (template + scripts + registry)
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.template_repo }}
@@ -54,7 +50,6 @@ jobs:
             .github/registry
           sparse-checkout-cone-mode: false
 
-      # 3) Verifica se o template existe
       - name: Validate template path
         run: |
           set -euo pipefail
@@ -62,7 +57,6 @@ jobs:
           echo "TEMPLATE_DIR=$TEMPLATE_DIR"
           test -f "$TEMPLATE_DIR/index.html" || { echo "index.html não encontrado em $TEMPLATE_DIR"; ls -laR central; exit 1; }
 
-      # 4) Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -73,14 +67,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install nbconvert jinja2 nbformat pyyaml
 
-      # 5) Copia o template do central para ./template/
       - name: Copy template from central
         run: |
           set -euo pipefail
           rm -rf template
           rsync -a --delete "central/${{ env.SITE_TEMPLATE_PATH }}/" "template/"
 
-      # 6) Resolve config do repo (TITLE, HERO_FILE, etc.) a partir do registry central
       - name: Resolve config from central registry
         shell: bash
         run: |
@@ -89,7 +81,7 @@ jobs:
           import os, sys, yaml
           from pathlib import Path
 
-          full = os.environ.get("GITHUB_REPOSITORY", "")  # owner/repo
+          full = os.environ.get("GITHUB_REPOSITORY", "")
           if "/" not in full:
             print(f"[fatal] invalid GITHUB_REPOSITORY={full}", file=sys.stderr)
             sys.exit(2)
@@ -131,14 +123,13 @@ jobs:
           print("[ok] wrote _cfg/site.yml")
           PY
 
-      # 7) Baixa HERO_FILE do repositório central e injeta no template (opcional)
       - name: Fetch hero image (from central)
         shell: bash
         run: |
           set -euo pipefail
 
-          # onde as heros ficam no CENTRAL (ajuste 1 vez e acabou)
-          HERO_DIR_IN_CENTRAL="assets/img/hero"   # exemplo: dentro do repo central
+          # AJUSTE aqui para o path real no repo central:
+          HERO_DIR_IN_CENTRAL="assets/img/hero"
 
           BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
@@ -160,11 +151,8 @@ jobs:
 
           mkdir -p template/assets/img
           curl -fsSL "$HERO_URL" -o template/assets/img/hero.png
-
-          # injeta no template (se você usa {{ HERO_URL }} no HTML)
           sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g' template/index.html
 
-      # 8) Constrói o site (usa o script do central)
       - name: Build site
         run: |
           python central/.github/scripts/build_site.py \
@@ -175,7 +163,6 @@ jobs:
             --cfg "_cfg" \
             --execute ${{ inputs.execute }}
 
-      # 9) Diagnóstico opcional
       - name: Show site tree
         run: |
           echo "== Conteúdo da pasta site =="
@@ -183,7 +170,6 @@ jobs:
           echo "== Estrutura de arquivos =="
           find site -maxdepth 3 -type f | sort
 
-      # 10) Deploy para a branch gh-pages
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
