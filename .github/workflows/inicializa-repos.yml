@@ -48,6 +48,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pyyaml requests
 
+      - name: Configure git identity
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+
+          
       - name: Run initializer
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

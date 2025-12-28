@@ -36,6 +36,10 @@ TEMPLATE_REPO_PATH = ".github/templates/repo"
 DISPATCH_SITE = os.environ.get("DISPATCH_SITE", "site-template-updated")
 DISPATCH_README = os.environ.get("DISPATCH_README", "readme-template-updated")
 
+# Identidade padrão para commits no runner (pode sobrescrever via env)
+GIT_USER_NAME = os.environ.get("GIT_USER_NAME", "github-actions[bot]")
+GIT_USER_EMAIL = os.environ.get("GIT_USER_EMAIL", "github-actions[bot]@users.noreply.github.com")
+
 def log(*a):  # noqa
     print("[init]", *a, flush=True)
 
@@ -162,10 +166,30 @@ def clone_repo(org: str, repo: str, dest: str) -> None:
 
 def git_has_changes(workdir: str) -> bool:
     if DRY_RUN:
-        # em DRY_RUN não temos status real, assume true para ver os passos
         return True
     out = subprocess.check_output(["git", "status", "--porcelain"], cwd=workdir).decode().strip()
     return bool(out)
+
+def git_config_identity(workdir: str) -> None:
+    """
+    Corrige: 'Author identity unknown' / 'empty ident name'.
+    Configura user.name/email LOCALMENTE no repo clonado e marca safe.directory.
+    """
+    if DRY_RUN:
+        log(f"DRY_RUN git_config_identity in {workdir}")
+        return
+
+    absdir = os.path.abspath(workdir)
+
+    # safe.directory (alguns runners exigem)
+    try:
+        subprocess.check_call(["git", "config", "--global", "--add", "safe.directory", absdir])
+    except Exception:
+        pass
+
+    # identidade local do repo (não depende do runner)
+    subprocess.check_call(["git", "config", "user.name", GIT_USER_NAME], cwd=workdir)
+    subprocess.check_call(["git", "config", "user.email", GIT_USER_EMAIL], cwd=workdir)
 
 def ensure_main_initialized(org: str, repo: str, workdir: str) -> None:
     """
@@ -176,10 +200,13 @@ def ensure_main_initialized(org: str, repo: str, workdir: str) -> None:
         log(f"{org}/{repo} is empty -> initializing main")
         run(["git", "checkout", "-b", "main"], cwd=workdir)
 
-        # Injeta infra completa (workflows, scripts placeholders, etc.)
         rsync(TEMPLATE_REPO_PATH, workdir, ignore_existing=False)
 
         run(["git", "add", "."], cwd=workdir)
+
+        # <<< correção essencial: identidade antes do commit
+        git_config_identity(workdir)
+
         run(["git", "commit", "-m", "chore: initialize repository"], cwd=workdir)
         run(["git", "push", "-u", "origin", "main"], cwd=workdir)
         return
@@ -187,7 +214,6 @@ def ensure_main_initialized(org: str, repo: str, workdir: str) -> None:
     log(f"{org}/{repo} not empty -> ensuring infra in main (non-destructive)")
     run(["git", "fetch", "origin"], cwd=workdir)
 
-    # tenta main, fallback master, fallback default remoto
     checked_out = False
     for br in ("main", "master"):
         try:
@@ -197,13 +223,15 @@ def ensure_main_initialized(org: str, repo: str, workdir: str) -> None:
         except Exception:
             continue
     if not checked_out:
-        # tenta a branch default remota (ex: origin/main)
         run(["git", "checkout", "-B", "main", "origin/main"], cwd=workdir)
 
     rsync(TEMPLATE_REPO_PATH, workdir, ignore_existing=True)
     run(["git", "add", "."], cwd=workdir)
 
     if git_has_changes(workdir):
+        # <<< correção essencial: identidade antes do commit
+        git_config_identity(workdir)
+
         run(["git", "commit", "-m", "chore: sync repo infra"], cwd=workdir)
         try:
             run(["git", "push"], cwd=workdir)
@@ -214,9 +242,7 @@ def ensure_main_initialized(org: str, repo: str, workdir: str) -> None:
 
 def should_skip(org: str, repo: str) -> bool:
     """
-    Regra alinhada com sua arquitetura:
-    - Skip só se gh-pages já existe e FORCE=false (ou seja, site já foi publicado alguma vez).
-    - Não usar /pages como truth source.
+    - Skip só se gh-pages já existe e FORCE=false.
     """
     try:
         branches = list_branches(org, repo)
