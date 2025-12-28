@@ -60,17 +60,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
-          FULL="${GITHUB_REPOSITORY}"   # ex: academic-codex/SEL0608-Eletromagnetismo
-          OWNER="${FULL%%/*}"
-          REPO="${FULL##*/}"
-
           python - <<'PY'
           import sys, yaml
           from pathlib import Path
 
-          owner = "${OWNER}"
-          repo  = "${REPO}"
+          full = os.environ.get("GITHUB_REPOSITORY", "")
+          if "/" not in full:
+            print(f"[fatal] invalid GITHUB_REPOSITORY={full}", file=sys.stderr)
+            sys.exit(2)
+
+          owner, repo = full.split("/", 1)
 
           reg = Path("central/.github/registry/repos.yml")
           data = yaml.safe_load(reg.read_text(encoding="utf-8")) or {}

@@ -99,7 +99,17 @@ jobs:
             print(f"[fatal] registry key 'repos' must be a list: {reg}", file=sys.stderr)
             sys.exit(2)
 
-          hit = next((it for it in items if it.get("org") == owner and it.get("name") == repo), None)
+          owner_l = owner.lower()
+          repo_l  = repo.lower()
+
+          hit = next(
+              (
+                  it for it in items
+                  if (it.get("org", "").lower() == owner_l)
+                  and (it.get("name", "").lower() == repo_l)
+              ),
+              None
+          )
           if not hit:
             print(f"[fatal] repo {owner}/{repo} not found in central registry: {reg}", file=sys.stderr)
             sys.exit(2)
