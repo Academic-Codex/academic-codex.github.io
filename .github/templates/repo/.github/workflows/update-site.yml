@@ -6,15 +6,20 @@ on:
     paths:
       - "**/*.ipynb"
       - "references.yml"
-      - "**/*.md"
-      - "**/*.png"
-      - "**/*.jpg"
-      - "**/*.jpeg"
-      - "**/*.svg"
-      - "**/*.gif"
-      - "**/*.pdf"
-
+      - "references.yaml"
+      - ".github/**"
   workflow_dispatch: {}
+  repository_dispatch:
+    types: [ site-template-updated ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   site:
@@ -22,8 +27,4 @@ jobs:
     with:
       execute: "false"
       template_repo: "Academic-Codex/academic-codex.github.io"
-      template_ref: "main"
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
+      template_ref: ${{ github.event.client_payload.template_ref || 'main' }}
