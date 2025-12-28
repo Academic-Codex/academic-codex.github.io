@@ -1,4 +1,4 @@
-name: Build README (Reusable)
+name: Build & Deploy README.md
 
 env:
   README_TEMPLATE_PATH: ".github/templates/readme"

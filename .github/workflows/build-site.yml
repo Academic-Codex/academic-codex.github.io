@@ -1,5 +1,4 @@
-# .github/workflows/build-site.yml
-name: Build & Deploy Template Site (Reusable)
+name: Build & Deploy Site
 
 env:
   SITE_TEMPLATE_PATH: ".github/templates/site"

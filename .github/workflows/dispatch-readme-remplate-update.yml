@@ -1,4 +1,4 @@
-name: Notify disciplines on readme template change
+name: Notify readme template updated
 
 env:
   GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}

@@ -1,4 +1,4 @@
-name: Notify disciplines on site template change
+name: Notify site template updated
 
 env:
   GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
