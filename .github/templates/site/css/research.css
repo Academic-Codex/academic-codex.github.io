@@ -16,3 +16,7 @@ body.research .research-text ul {
     /* branco ao passar o mouse */
     text-decoration: underline;
 }
+
+.ref-list { list-style: none; padding-left: 0; margin: 0; }
+.ref-item { padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,.12); }
+.ref-meta, .ref-note, .ref-link { margin-top: 4px; font-size: 0.95em; opacity: .85; }

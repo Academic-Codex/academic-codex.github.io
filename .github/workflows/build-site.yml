@@ -1,5 +1,5 @@
-# .github/workflows/build-template-site.yml
-name: Build & Deploy Template Site
+# .github/workflows/build-site.yml
+name: Build & Deploy Template Site (Reusable)
 
 env:
   SITE_TEMPLATE_PATH: ".github/templates/site"
@@ -10,7 +10,7 @@ on:
       site_title:
         type: string
         required: false
-        default: ''
+        default: ""
       execute:
         type: string
         required: false
@@ -18,14 +18,11 @@ on:
       template_repo:
         type: string
         required: false
-        default: "Academic-Codex/academic-codex.github.io" # default em uso!
+        default: "Academic-Codex/academic-codex.github.io"
       template_ref:
         type: string
         required: false
-        default: "main" # default em uso!
-      placeholders_path:
-        type: string
-        required: true
+        default: "main"
 
 permissions:
   contents: write
@@ -45,7 +42,7 @@ jobs:
       - name: Checkout discipline repo
         uses: actions/checkout@v4
 
-      # 2) Checkout do repositório central (template e scripts)
+      # 2) Checkout do repositório central (template e scripts + registry)
       - name: Checkout central (template e scripts)
         uses: actions/checkout@v4
         with:
@@ -55,6 +52,7 @@ jobs:
           sparse-checkout: |
             .github/templates
             .github/scripts/build_site.py
+            .github/registry
           sparse-checkout-cone-mode: false
 
       # 3) Verifica se o template existe
@@ -83,22 +81,80 @@ jobs:
           rm -rf template
           rsync -a --delete "central/${{ env.SITE_TEMPLATE_PATH }}/" "template/"
 
-      # 6) Monta URL base e baixa HERO_FILE do repositório da disciplina
+      # 6) Resolve config do repo (TITLE, HERO_FILE, etc.) a partir do registry central
+      - name: Resolve config from central registry
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          FULL="${GITHUB_REPOSITORY}"   # ex: academic-codex/SEL0608-Eletromagnetismo
+          OWNER="${FULL%%/*}"
+          REPO="${FULL##*/}"
+
+          echo "OWNER=$OWNER" >> "$GITHUB_ENV"
+          echo "REPO=$REPO"   >> "$GITHUB_ENV"
+
+          python - <<'PY'
+          import yaml, sys
+          from pathlib import Path
+
+          owner = "${OWNER}"
+          repo  = "${REPO}"
+
+          reg = Path("central/.github/registry/repos.yml")
+          if not reg.exists():
+            print(f"[fatal] registry not found: {reg}", file=sys.stderr)
+            sys.exit(2)
+
+          data = yaml.safe_load(reg.read_text(encoding="utf-8")) or {}
+          items = data.get("repos", [])
+
+          hit = None
+          for it in items:
+            if (it.get("org") == owner) and (it.get("name") == repo):
+              hit = it
+              break
+
+          if not hit:
+            print(f"[fatal] repo {owner}/{repo} not found in central registry: {reg}", file=sys.stderr)
+            sys.exit(2)
+
+          site = hit.get("site") or {}
+
+          out = {
+            # tokens básicos
+            "TITLE": hit.get("title") or repo,
+
+            # hero (se vazio, o workflow só pula)
+            "HERO_FILE": site.get("hero_image", ""),
+
+            # se você guardar heros em outra pasta no template central, ajuste aqui:
+            # ex: ".github/templates/site/assets/img/hero/<arquivo>"
+            "ASSETS_SUBDIR": (site.get("hero_subdir") or ".github/templates/site/assets/img/hero").strip("/"),
+          }
+
+          Path("_cfg").mkdir(exist_ok=True)
+          Path("_cfg/site.yml").write_text(
+            yaml.safe_dump(out, sort_keys=False, allow_unicode=True),
+            encoding="utf-8"
+          )
+          print("[ok] wrote _cfg/site.yml")
+          PY
+
+      # 7) Baixa HERO_FILE do repositório central e injeta no template (opcional)
       - name: Fetch hero image
         shell: bash
         run: |
           set -euo pipefail
 
-          # mesma base que você já usa
           BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
-          # lê um ARQUIVO ou um DIRETÓRIO e mescla todos yml/yaml
           python - <<'PY' > hero_relpath.txt
           import sys, yaml
           from pathlib import Path
 
-          cfg_path = Path("${{ inputs.repo_cfg_path }}")  # pode ser arquivo OU diretório
           data = {}
+          cfg_path = Path("_cfg")
 
           def merge(d):
             if not d: return
@@ -106,21 +162,17 @@ jobs:
               data[k] = v
 
           if cfg_path.exists():
-            if cfg_path.is_file():
-              merge(yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {})
-            else:
-              for p in sorted(list(cfg_path.rglob("*.yml")) + list(cfg_path.rglob("*.yaml"))):
-                merge(yaml.safe_load(p.read_text(encoding="utf-8")) or {})
+            for p in sorted(list(cfg_path.rglob("*.yml")) + list(cfg_path.rglob("*.yaml"))):
+              merge(yaml.safe_load(p.read_text(encoding="utf-8")) or {})
 
-          sub = (data.get("ASSETS_SUBDIR") or "img/portfolio").strip("/")
+          sub = (data.get("ASSETS_SUBDIR") or "").strip("/")
           fil = (data.get("HERO_FILE") or "").strip("/")
 
-          # não mata o build se não tiver hero (só pula)
           if not fil:
             print("")
             sys.exit(0)
 
-          print(f"{sub}/{fil}")
+          print(f"{sub}/{fil}" if sub else fil)
           PY
 
           HERO_REL="$(cat hero_relpath.txt || true)"
@@ -135,10 +187,10 @@ jobs:
           mkdir -p template/assets/img
           curl -fsSL "$HERO_URL" -o template/assets/img/hero.png
 
-          sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g' template/index.html
+          # Substitui token HERO_URL em todas as páginas do template (se existir)
+          find template -maxdepth 1 -name "*.html" -print0 | xargs -0 sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g'
 
-
-      # 7) Constrói o site (usa o script do central)
+      # 8) Constrói o site (usa o script do central)
       - name: Build site
         run: |
           python central/.github/scripts/build_site.py \
@@ -146,22 +198,16 @@ jobs:
             --out site \
             --template template \
             --title "${{ inputs.site_title }}" \
-            --cfg "${{ inputs.placeholders_path }}" \
+            --cfg "_cfg" \
             --execute ${{ inputs.execute }}
 
-      # 8) Diagnóstico opcional
+      # 9) Diagnóstico opcional
       - name: Show site tree
         run: |
           echo "== Conteúdo da pasta site =="
           ls -lah site || true
           echo "== Estrutura de arquivos =="
           find site -maxdepth 3 -type f | sort
-
-      # 9) Upload do artefato (GitHub Pages)
-      - name: Upload artifact (site/)
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
 
       # 10) Deploy para a branch gh-pages
       - name: Deploy to gh-pages

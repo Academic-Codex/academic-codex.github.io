@@ -1,0 +1,19 @@
+name: Update Site
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "**/*.ipynb"
+      - "references.yml"
+  workflow_dispatch: {}
+
+jobs:
+  site:
+    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-site.yml@main
+    with:
+      execute: "false"
+      template_repo: "Academic-Codex/academic-codex.github.io"
+      template_ref: "main"
+    permissions:
+      contents: write

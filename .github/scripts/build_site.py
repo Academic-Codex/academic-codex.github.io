@@ -6,6 +6,8 @@ from datetime import datetime
 import sys
 import re, json, html
 import yaml
+import html
+
 
 def _load_yaml_file(p: Path) -> dict:
     with p.open("r", encoding="utf-8") as f:
@@ -188,6 +190,14 @@ def collect_tree(src: Path, out: Path, execute: bool):
 def build_static_site(src: Path, out: Path, template_dir: Path, title: str, execute: bool, cfg: dict | None):
     tree, nb_count = collect_tree(src, out, execute)
 
+    # === NOVO: carregar refs do repo e colocar no cfg para render_tokens ===
+    refs = load_references(src)  # assumes references.yml no root do repo (src)
+    refs_html = render_references_html(refs)
+    cfg = dict(cfg or {})
+    cfg["REFERENCIAS"] = refs_html
+    
+    tree, nb_count = collect_tree(src, out, execute)
+
     out.mkdir(parents=True, exist_ok=True)
     pages = [
         ("index.html", False),     # Home
@@ -239,6 +249,46 @@ def render_tokens(src: str, title: str, nb_count: int, tree: dict | None, cfg: d
 
     return out
 
+def load_references(repo_path: Path) -> list[dict]:
+    p = repo_path / "references.yml"
+    if not p.exists():
+        return []
+    try:
+        data = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        refs = data.get("references", [])
+        return refs if isinstance(refs, list) else []
+    except Exception as e:
+        print(f"[warn] references.yml inválido em {repo_path}: {e}")
+        return []
+
+def render_references_html(refs: list[dict]) -> str:
+    if not refs:
+        return '<p class="muted"><em>No references provided yet.</em></p>'
+
+    items = []
+    for r in refs:
+        title = html.escape(str(r.get("title", "")).strip() or "Untitled")
+        author = html.escape(str(r.get("author", "")).strip())
+        year = html.escape(str(r.get("year", "")).strip())
+        note = html.escape(str(r.get("note", "")).strip())
+        url = str(r.get("url", "")).strip()
+
+        # monta linha “bonita” e mono
+        parts = [f"<strong>{title}</strong>"]
+        meta = " — ".join([p for p in [author, year] if p])
+        if meta:
+            parts.append(f"<div class='ref-meta'>{meta}</div>")
+        if note:
+            parts.append(f"<div class='ref-note'><em>{note}</em></div>")
+
+        if url:
+            safe_url = html.escape(url, quote=True)
+            parts.append(f"<div class='ref-link'><a href='{safe_url}' target='_blank' rel='noreferrer'>link</a></div>")
+
+        items.append("<li class='ref-item'>" + "\n".join(parts) + "</li>")
+
+    return "<ul class='ref-list'>\n" + "\n".join(items) + "\n</ul>"
+    
 def main():
     ap = argparse.ArgumentParser(
         description="Gera um site estático a partir de notebooks .ipynb usando nbconvert e um template externo."
