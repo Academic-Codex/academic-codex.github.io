@@ -2,7 +2,6 @@ name: Build & Deploy repos Site
 
 env:
   SITE_TEMPLATE_PATH: ".github/templates/site"
-  ASSETS_IMG_HERO: "img/portifolio"
 
 on:
   workflow_call:
@@ -139,8 +138,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Pasta (no repo central) onde ficam as imagens
-          HERO_DIR_IN_CENTRAL="assets/img/hero"
+          HERO_DIR_IN_CENTRAL="img/portfolio"
+
           BASE_RAW="https://raw.githubusercontent.com/${{ inputs.template_repo }}/${{ inputs.template_ref }}"
 
           python - <<'PY' > hero_file.txt
@@ -159,16 +158,9 @@ jobs:
           HERO_URL="$BASE_RAW/$HERO_DIR_IN_CENTRAL/$HERO_FILE"
           echo "Baixando hero: $HERO_URL"
 
-          # ✅ usa a variável ASSETS_IMG_HERO como destino dentro do template
-          DEST_DIR="template/${{ env.ASSETS_IMG_HERO }}"
-          mkdir -p "$DEST_DIR"
-          curl -fsSL "$HERO_URL" -o "$DEST_DIR/hero.png"
-
-          # ✅ caminho que vai aparecer no HTML (relativo ao root do site)
-          HERO_REF="./${{ env.ASSETS_IMG_HERO }}/hero.png"
-
-          # troca o placeholder do template pelo caminho correto
-          sed -i.bak "s#{{ *HERO_URL *}}#${HERO_REF}#g" template/index.html
+          mkdir -p template/assets/img
+          curl -fsSL "$HERO_URL" -o template/assets/img/hero.png
+          sed -i.bak 's#{{ *HERO_URL *}}#./assets/img/hero.png#g' template/index.html
 
       - name: Build site
         run: |
