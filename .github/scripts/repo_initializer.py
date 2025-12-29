@@ -160,11 +160,25 @@ def ensure_main_checkout(repo_dir: Path) -> None:
         run(["git", "checkout", "-B", "main", "origin/main"], cwd=repo_dir)
         run(["git", "reset", "--hard", "origin/main"], cwd=repo_dir)
     else:
-        # repo vazio
-        run(["git", "checkout", "--orphan", "main"], cwd=repo_dir)
+        # cria gh-pages orphan de forma inequívoca
+        run(["git", "checkout", "--orphan", "gh-pages"], cwd=repo_dir)
+
+        # GARANTE que o HEAD está em gh-pages
+        run(["git", "symbolic-ref", "HEAD", "refs/heads/gh-pages"], cwd=repo_dir)
+
         # limpa tudo
-        run(["git", "rm", "-rf", "."], cwd=repo_dir)
+        subprocess.run(["git", "rm", "-rf", "."], cwd=str(repo_dir), check=False)
         run(["git", "clean", "-fd"], cwd=repo_dir)
+
+        # copia seed
+        run(["rsync", "-a", "--delete", f"{TEMPLATE_GHPAGES_SEED_DIR}/", f"{repo_dir}/"])
+
+        # commit EXPLICITAMENTE na gh-pages
+        run(["git", "add", "."], cwd=repo_dir)
+        run(["git", "commit", "-m", "chore: seed gh-pages from central template"], cwd=repo_dir)
+
+        # push explícito
+        run(["git", "push", "-u", "origin", "gh-pages"], cwd=repo_dir)
 
 def sync_workflows_and_gitignore(repo_dir: Path) -> bool:
     """
