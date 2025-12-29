@@ -63,6 +63,17 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+     
+      - name: Debug workspace layout
+        run: |
+          echo "PWD:"
+          pwd
+          echo
+          echo "LS (root):"
+          ls -la
+          echo
+          echo "Tree depth=3:"
+          find . -maxdepth 3 -type d | sed 's|^\./||'
 
       # ------------------------------------------------------------
       # 5) Inicializador (EXECUTA DENTRO DO CENTRAL)
