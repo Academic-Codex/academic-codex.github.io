@@ -26,9 +26,6 @@ REGISTRY_FILE = Path(".github/registry/repos.yml")
 TEMPLATE_WORKFLOWS_DIR = Path(".github/templates/repo/.github/workflows")
 TEMPLATE_GITIGNORE_FILE = Path(".github/templates/repo/.gitignore")
 
-# Seed inicial do gh-pages (copiado 1x, somente se gh-pages não existir)
-TEMPLATE_GHPAGES_SEED_DIR = Path(".github/templates/site")
-
 WORKDIR_BASE = Path("_work")
 
 EVENT_SITE = os.environ.get("DISPATCH_SITE", "site-template-updated")
@@ -86,20 +83,29 @@ def get_pages(org: str, repo: str) -> Optional[dict]:
 
 def enable_pages_once(org: str, repo: str) -> str:
     """
-    Só habilita pages se ainda não existir.
-    Se já existir, não altera nada.
+    Garante Pages apontando para gh-pages:/ .
+    Se já estiver ok, noop.
     Returns: "enabled" | "noop"
     """
+    payload = {"source": {"branch": "gh-pages", "path": "/"}}
+
     current = get_pages(org, repo)
     if current is not None:
-        return "noop"
+        src = (current.get("source") or {})
+        if src.get("branch") == "gh-pages" and src.get("path") == "/":
+            return "noop"
+        # se existe mas está diferente, atualiza
+        r_put = gh("PUT", f"{API}/repos/{org}/{repo}/pages", json=payload)
+        if r_put.status_code in (200, 201, 204):
+            return "enabled"
+        raise RuntimeError(f"enable_pages update failed: {r_put.status_code} {r_put.text}")
 
-    payload = {"source": {"branch": "gh-pages", "path": "/"}}
+    # não existe ainda: cria
     r_post = gh("POST", f"{API}/repos/{org}/{repo}/pages", json=payload)
     if r_post.status_code in (201, 204):
         return "enabled"
 
-    # fallback PUT (idempotência)
+    # fallback PUT
     r_put = gh("PUT", f"{API}/repos/{org}/{repo}/pages", json=payload)
     if r_put.status_code in (200, 201, 204):
         return "enabled"
@@ -204,41 +210,6 @@ def sync_workflows_and_gitignore(repo_dir: Path) -> bool:
     run(["git", "push", "-u", "origin", "main"], cwd=repo_dir)
     return True
 
-def remote_branch_exists(repo_dir: Path, branch: str) -> bool:
-    r = subprocess.run(
-        ["git", "ls-remote", "--heads", "origin", branch],
-        cwd=str(repo_dir),
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    return bool((r.stdout or "").strip())
-
-def seed_gh_pages_once(repo_dir: Path) -> bool:
-    """
-    Se gh-pages já existe -> NOOP (False)
-    Se não existe -> cria orphan gh-pages, copia seed, commit, push (True)
-    """
-    if remote_branch_exists(repo_dir, "gh-pages"):
-        return False
-
-    if not TEMPLATE_GHPAGES_SEED_DIR.exists():
-        raise RuntimeError(f"gh-pages seed dir not found: {TEMPLATE_GHPAGES_SEED_DIR}")
-
-    # cria gh-pages orphan
-    run(["git", "checkout", "--orphan", "gh-pages"], cwd=repo_dir)
-    # remove tracked files (se houver)
-    subprocess.run(["git", "rm", "-rf", "."], cwd=str(repo_dir), check=False)
-    run(["git", "clean", "-fd"], cwd=repo_dir)
-
-    # copia seed -> raiz do repo
-    run(["rsync", "-a", "--delete", f"{TEMPLATE_GHPAGES_SEED_DIR}/", f"{repo_dir}/"])
-
-    run(["git", "add", "."], cwd=repo_dir)
-    run(["git", "commit", "-m", "chore: seed gh-pages from central template"], cwd=repo_dir)
-    run(["git", "push", "-u", "origin", "gh-pages"], cwd=repo_dir)
-    return True
-
 
 # =========================
 # CORE
@@ -279,15 +250,6 @@ def process_repo(entry: Dict) -> None:
             log(repo_full, "Atualizou main (workflows + gitignore)")
     except Exception as e:
         err(repo_full, "sync_main", str(e))
-        return
-
-    # 4) gh-pages: seed only if missing
-    try:
-        seeded = seed_gh_pages_once(repo_dir)
-        if seeded:
-            log(repo_full, "Criou gh-pages + seed do template (1x)")
-    except Exception as e:
-        err(repo_full, "seed_gh_pages", str(e))
         return
 
     # 5) pages: enable only if not exists
