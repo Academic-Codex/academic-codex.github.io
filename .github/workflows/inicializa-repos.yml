@@ -20,13 +20,6 @@ on:
         required: false
         default: ""
 
-      force:
-        description: "Forçar re-publicar gh-pages mesmo se existir"
-        required: true
-        default: "false"
-        type: choice
-        options: ["false", "true"]
-
 jobs:
   init:
     runs-on: ubuntu-latest
@@ -80,6 +73,5 @@ jobs:
           MODE: ${{ inputs.mode }}
           ONE_ORG: ${{ inputs.org }}
           ONE_REPO: ${{ inputs.repo }}
-          FORCE: ${{ inputs.force }}
         run: |
           python .github/scripts/repo_initializer.py
