@@ -1,60 +1,103 @@
-# Arquivos de Sistema
+####################################
+# macOS
+####################################
 .DS_Store
-.localized
 
-# Arquivos de Python
+####################################
+# Python
+####################################
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv
-.venv/**
-.venv/*
-.env
-pip-log.txt
-*.egg-info/
-.coverage
+*.py[cod]
+*$py.class
 
-# Arquivos de TeX/LaTeX
+# virtualenvs
+.venv/
+venv/
+env/
+ENV/
+
+# pip
+pip-wheel-metadata/
+pip-log.txt
+
+# setuptools / packaging
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# mypy / pyright
+.mypy_cache/
+.pyright/
+.dmypy.json
+
+####################################
+# Jupyter Notebook
+####################################
+.ipynb_checkpoints/
+
+# Jupyter runtime / kernels
+.jupyter/
+.ipython/
+
+# nbconvert / execution artifacts
+*-executed.ipynb
+*-out.ipynb
+
+####################################
+# LaTeX
+####################################
+# Core aux files
 *.aux
-*.bbl
-*.blg
-*.brf
 *.log
-*.nav
 *.out
-*.snm
 *.toc
-*.dvi
-*.ps
-*.gz
-*.bak
-*.synctex.gz*
+*.lof
+*.lot
 *.fls
 *.fdb_latexmk
-*.lot
-*.lof
-*.bcf
-*.run.xml
-*.spl
+*.synctex.gz
 
-# Arquivos de editores
-*~
-# Vim
+# BibTeX / biber
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
+# latexmk
+latexmkrc
+
+# minted
+_minted*
+*.pyg
+
+# TikZ externalization
+tikz/
+*.dpth
+*.md5
+
+####################################
+# Editors
+####################################
+.vscode/
+.idea/
 *.swp
 *.swo
-# Emacs
-#*#
-#.#*
-# VS Code
-.vscode/
+*~
 
-# Arquivos de backup
+####################################
+# OS / temp
+####################################
+tmp/
+temp/
+*.tmp
 *.bak
-*.old
 *.orig
-
-# Folder
+*.log
+texput.log
