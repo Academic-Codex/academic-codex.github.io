@@ -11,7 +11,7 @@ repos:
   - org: academic-codex
     name: TEST0001-Disciplina-Fantasma3
     id: TEST0001
-    title: Disciplina Fantasma2
+    title: Disciplina Fantasma4
     academic_level: undergrad
     academic_area: Testing
     academic_school: Academic Codex

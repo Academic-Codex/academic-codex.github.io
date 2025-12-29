@@ -39,7 +39,7 @@ EVENT_README = os.environ.get("DISPATCH_README", "readme-template-updated")
 # LOGGING (mínimo)
 # =========================
 def log(repo_full: str, msg: str) -> None:
-    print(f"{repo_full}: {msg}", flush=True)
+    print(f"[ACTION] {repo_full}: {msg}", flush=True)
 
 def err(repo_full: str, step: str, msg: str) -> None:
     print(f"[ERROR] {repo_full} step={step} {msg}", file=sys.stderr, flush=True)
@@ -64,7 +64,7 @@ def create_repo(org: str, repo: str, desc: str = "", private: bool = False) -> b
         "name": repo,
         "description": desc,
         "private": private,
-        "auto_init": False,
+        "auto_init": True,
         "has_issues": False,
         "has_projects": False,
         "has_wiki": False,
