@@ -76,4 +76,4 @@ jobs:
           ONE_REPO: ${{ inputs.repo }}
           FORCE: ${{ inputs.force }}
         run: |
-          python .github/scripts/repo_initializer.py
+          python central/.github/scripts/repo_initializer.py
