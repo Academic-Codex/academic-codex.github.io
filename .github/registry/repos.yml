@@ -26,9 +26,9 @@ repos:
   # Caso 2: outra disciplina, mesmo fluxo
   # ------------------------------------------------
   - org: academic-codex
-    name: SSC0570-Empreendedores-Em-Informatica
-    id: SSC0570
-    title: Empreendedores em Informática
+    name: SEL0612-Ondas-Eletromagneticas
+    id: SEL0612
+    title: Ondas Eletromagneticas
     academic_level: undergrad
     academic_area: Computer Science
     academic_school: USP
