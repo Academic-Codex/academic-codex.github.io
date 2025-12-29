@@ -18,8 +18,8 @@ HEADERS = {
     "Accept": "application/vnd.github+json",
 }
 
-CENTRAL_WORKFLOWS_DIR = Path("central/.github/workflows")
-REGISTRY_FILE = Path("central/.github/registry/repos.yml")
+CENTRAL_WORKFLOWS_DIR = Path(".github/workflows")
+REGISTRY_FILE = Path(".github/registry/repos.yml")
 WORKDIR_BASE = Path("_work")
 
 # =========================================================
