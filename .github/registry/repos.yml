@@ -9,7 +9,7 @@ repos:
   # Caso 3: repo fictício (teste de criação)
   # ------------------------------------------------
   - org: academic-codex
-    name: TEST0001-Disciplina-Fantasma3
+    name: TEST0001-Disciplina-Fantasma4
     id: TEST0001
     title: Disciplina Fantasma4
     academic_level: undergrad
