@@ -149,36 +149,28 @@ def ensure_local_repo(org: str, repo: str) -> Path:
 
 def ensure_main_checkout(repo_dir: Path) -> None:
     """
-    Garante que existe main local baseada na origin/main.
-    Se repo estiver vazio (sem origin/main), cria main orphan.
+    Garante que existe um branch local `main`.
+    - Se existir `origin/main`, recria `main` a partir dele.
+    - Se NÃO existir (repo recém-criado), cria `main` como orphan limpo.
     """
-    # tenta origin/main
-    branches = out(["git", "branch", "-r"], cwd=repo_dir).splitlines()
-    has_origin_main = any(b.strip() == "origin/main" for b in branches)
+
+    # verifica se existe origin/main
+    remotes = out(["git", "branch", "-r"], cwd=repo_dir).splitlines()
+    has_origin_main = any(r.strip() == "origin/main" for r in remotes)
 
     if has_origin_main:
+        # força main a refletir exatamente origin/main
         run(["git", "checkout", "-B", "main", "origin/main"], cwd=repo_dir)
         run(["git", "reset", "--hard", "origin/main"], cwd=repo_dir)
+        run(["git", "clean", "-ffd"], cwd=repo_dir)
     else:
-        # cria gh-pages orphan de forma inequívoca
-        run(["git", "checkout", "--orphan", "gh-pages"], cwd=repo_dir)
+        # repo vazio: cria main orphan, HEAD inequívoco
+        run(["git", "checkout", "--orphan", "main"], cwd=repo_dir)
+        run(["git", "symbolic-ref", "HEAD", "refs/heads/main"], cwd=repo_dir)
 
-        # GARANTE que o HEAD está em gh-pages
-        run(["git", "symbolic-ref", "HEAD", "refs/heads/gh-pages"], cwd=repo_dir)
-
-        # limpa tudo
-        subprocess.run(["git", "rm", "-rf", "."], cwd=str(repo_dir), check=False)
-        run(["git", "clean", "-fd"], cwd=repo_dir)
-
-        # copia seed
-        run(["rsync", "-a", "--delete", f"{TEMPLATE_GHPAGES_SEED_DIR}/", f"{repo_dir}/"])
-
-        # commit EXPLICITAMENTE na gh-pages
-        run(["git", "add", "."], cwd=repo_dir)
-        run(["git", "commit", "-m", "chore: seed gh-pages from central template"], cwd=repo_dir)
-
-        # push explícito
-        run(["git", "push", "-u", "origin", "gh-pages"], cwd=repo_dir)
+        # limpa tudo (não depende de git rm)
+        run(["git", "reset", "--hard"], cwd=repo_dir)
+        run(["git", "clean", "-ffd"], cwd=repo_dir)
 
 def sync_workflows_and_gitignore(repo_dir: Path) -> bool:
     """
