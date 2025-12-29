@@ -1,0 +1,103 @@
+####################################
+# macOS
+####################################
+.DS_Store
+
+####################################
+# Python
+####################################
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenvs
+.venv/
+venv/
+env/
+ENV/
+
+# pip
+pip-wheel-metadata/
+pip-log.txt
+
+# setuptools / packaging
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# mypy / pyright
+.mypy_cache/
+.pyright/
+.dmypy.json
+
+####################################
+# Jupyter Notebook
+####################################
+.ipynb_checkpoints/
+
+# Jupyter runtime / kernels
+.jupyter/
+.ipython/
+
+# nbconvert / execution artifacts
+*-executed.ipynb
+*-out.ipynb
+
+####################################
+# LaTeX
+####################################
+# Core aux files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# BibTeX / biber
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
+# latexmk
+latexmkrc
+
+# minted
+_minted*
+*.pyg
+
+# TikZ externalization
+tikz/
+*.dpth
+*.md5
+
+####################################
+# Editors
+####################################
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+####################################
+# OS / temp
+####################################
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+*.log
+texput.log

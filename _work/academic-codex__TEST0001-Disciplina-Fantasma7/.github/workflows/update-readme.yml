@@ -1,0 +1,16 @@
+name: Update README
+
+on:
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [ readme-template-updated ]
+
+permissions:
+  contents: write
+
+jobs:
+  readme:
+    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-readme.yml@main
+    with:
+      template_repo: "Academic-Codex/academic-codex.github.io"
+      template_ref: ${{ github.event.client_payload.template_ref || 'main' }}
