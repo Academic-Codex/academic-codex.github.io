@@ -1,0 +1,12 @@
+---
+title: "IF4302212 Physics IV"
+link: "/IF4302212-Fisica-IV"
+category: undergraduate
+area: Physics
+layout: default
+modal-id: 12
+date: 2026-02-10
+img: fisica-iv.png
+alt: image-alt
+description: 
+---

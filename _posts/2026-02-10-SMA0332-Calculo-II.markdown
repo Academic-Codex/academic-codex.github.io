@@ -1,0 +1,12 @@
+---
+title: "SMA0332 Calculus II"
+link: "/SMA0332-Calculo-II"
+category: undergraduate
+area: Mathematics
+layout: default
+modal-id: 84
+date: 2026-02-10
+img: calculo-ii.png
+alt: image-alt
+description: 
+---

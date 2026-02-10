@@ -1,0 +1,31 @@
+title: Academic Codex
+url: https://academic-codex.github.io
+email: nara.moraes@usp.br
+description: ''
+skills: ''
+meta_author: Moraes Nara
+google_verify: null
+bing_verify: null
+contact: static
+disqus_shortname: myshortname
+color:
+  primary: 80B3FF
+  primary-rgb: 128,179,255
+  secondary: 2c3e50
+  secondary-dark: e3dad4
+footer:
+  copyright: Nara Ávila Moraes
+social: null
+markdown: kramdown
+permalink: pretty
+defaults:
+- scope:
+    path: ''
+    type: posts
+  values:
+    permalink: ''
+org: academic-codex
+utm_source: academic-codex
+github_url: https://github.com/academic-codex/academic-codex.github.io
+ga_tracking_id: G-EM7FEY66C3
+hero_image: /img/hero-banner.jpg

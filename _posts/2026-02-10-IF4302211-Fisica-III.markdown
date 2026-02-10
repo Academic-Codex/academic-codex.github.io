@@ -1,0 +1,12 @@
+---
+title: "IF4302211 Physics III"
+link: "/IF4302211-Fisica-III"
+category: undergraduate
+area: Physics
+layout: default
+modal-id: 11
+date: 2026-02-10
+img: fisica-iii.png
+alt: image-alt
+description: 
+---

@@ -1,0 +1,17 @@
+name: Listener Update Website
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  run:
+    uses: naavilam/github-infra-templates/.github/workflows/manager-provisioner.yml@main
+    with:
+      org: ${{ vars.org }}
+    secrets:
+      PROVISIONER_APP_ID: ${{ vars.PROVISIONER_APP_ID }}
+      PROVISIONER_PRIVATE_KEY_PEM: ${{ secrets.PROVISIONER_PRIVATE_KEY_PEM }}
