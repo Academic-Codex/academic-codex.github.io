@@ -1,0 +1,51 @@
+{% assign und_posts = site.posts | where: "category", "undergraduate" %}
+
+{% if und_posts and und_posts.size > 0 %}
+<!-- Portfolio Grid Section (Undergrad) -->
+<section id="portfolio-und">
+  <div class="container portfolio-flex-grid">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h2>Undergrad</h2>
+        <hr class="star-primary">
+      </div>
+
+      <!-- Dropdown da área (escopo: undergrad) -->
+      {% assign und_areas = und_posts | map: "area" | uniq | sort_natural %}
+      {% if und_areas and und_areas.size > 0 %}
+      <select id="areaFilter-und" class="form-control" style="display:inline-block;max-width:260px;margin:8px 0 16px;">
+        <option value="all">All areas</option>
+        {% for a in und_areas %}
+        {% if a %}
+        <!-- IMPORTANTE: value precisa bater com data-area (slugify) -->
+        <option value="{{ a | slugify }}">{{ a }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      {% endif %}
+    </div>
+
+    <div class="portfolio-flex-row" id="grid-und">
+      {% for post in und_posts %}
+      <div class="portfolio-flex-item portfolio-item" data-area="{{ post.area | slugify }}">
+        <div class="card-title text-center">{{ post.title }}</div>
+
+        {% if post.link %}
+        <a href="{{ post.link | relative_url }}?utm_source={{ site.utm_source }}&utm_medium=portfolio"
+          class=" portfolio-link" rel="noopener">
+          {% else %}
+          <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
+            {% endif %}
+            <div class="thumb">
+              <img src="img/portfolio/{{ post.img }}" alt="{{ post.alt | default: post.title }}">
+              <div class="caption" aria-hidden="true">
+                <div class="caption-content"><i class="fa-solid fa-bolt fa-3x"></i></div>
+              </div>
+            </div>
+          </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

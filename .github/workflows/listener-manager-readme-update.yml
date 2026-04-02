@@ -1,0 +1,17 @@
+name: Listener Manager Update Readme
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  call:
+    uses: naavilam/github-infra-templates/.github/workflows/manager-readme-update.yml@main
+    with:
+      org: ${{ github.repository_owner }}
+    secrets:
+      PROVISIONER_APP_ID: ${{ vars.PROVISIONER_APP_ID }}
+      PROVISIONER_PRIVATE_KEY_PEM: ${{ secrets.PROVISIONER_PRIVATE_KEY_PEM }}
