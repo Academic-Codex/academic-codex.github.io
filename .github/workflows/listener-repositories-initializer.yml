@@ -1,0 +1,21 @@
+name: Listener Repositories Initializer
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Target repository or else all"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    uses: naavilam/github-infra-templates/.github/workflows/repositories-initializer.yml@main
+    with:
+      repo: ${{ inputs.target }}
+    secrets:
+      PROVISIONER_APP_ID: ${{ vars.PROVISIONER_APP_ID }}
+      PROVISIONER_PRIVATE_KEY_PEM: ${{ secrets.PROVISIONER_PRIVATE_KEY_PEM }}

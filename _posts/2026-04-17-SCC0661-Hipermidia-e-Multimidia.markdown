@@ -1,0 +1,12 @@
+---
+title: "SCC0661 Hypermedia and Multimedia"
+link: "/SCC0661-Hipermidia-e-Multimidia"
+category: undergraduate
+area: Communications
+layout: default
+modal-id: 34
+date: 2026-04-17
+img: multimidia-hipermidia.png
+alt: image-alt
+description: 
+---
