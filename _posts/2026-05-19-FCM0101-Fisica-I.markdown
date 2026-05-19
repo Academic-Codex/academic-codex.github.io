@@ -1,0 +1,18 @@
+---
+title: "FCM0101 Physics I"
+link: "/FCM0101-Fisica-I"
+category: "undergraduate"
+
+academic_area: "Physics"
+academic_field: ""
+
+area: "Physics"
+field: ""
+
+layout: default
+modal-id: 3
+date: 2026-05-19
+img: "fisica-i_.png"
+alt: image-alt
+description: ""
+---

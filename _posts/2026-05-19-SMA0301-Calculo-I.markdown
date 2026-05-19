@@ -1,0 +1,18 @@
+---
+title: "SMA0301 Calculus I"
+link: "/SMA0301-Calculo-I"
+category: "undergraduate"
+
+academic_area: "Mathematics"
+academic_field: ""
+
+area: "Mathematics"
+field: ""
+
+layout: default
+modal-id: 84
+date: 2026-05-19
+img: "calculo-i.png"
+alt: image-alt
+description: ""
+---

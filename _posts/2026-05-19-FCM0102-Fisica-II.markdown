@@ -1,0 +1,18 @@
+---
+title: "FCM0102 Physics II"
+link: "/FCM0102-Fisica-II"
+category: "undergraduate"
+
+academic_area: "Physics"
+academic_field: ""
+
+area: "Physics"
+field: ""
+
+layout: default
+modal-id: 4
+date: 2026-05-19
+img: "fisica-ii_.png"
+alt: image-alt
+description: ""
+---

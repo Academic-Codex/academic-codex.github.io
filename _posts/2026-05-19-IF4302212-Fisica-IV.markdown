@@ -1,0 +1,18 @@
+---
+title: "IF4302212 Physics IV"
+link: "/IF4302212-Fisica-IV"
+category: "undergraduate"
+
+academic_area: "Physics"
+academic_field: ""
+
+area: "Physics"
+field: ""
+
+layout: default
+modal-id: 12
+date: 2026-05-19
+img: "fisica-iv.png"
+alt: image-alt
+description: ""
+---

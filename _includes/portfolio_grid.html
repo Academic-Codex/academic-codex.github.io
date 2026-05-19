@@ -1,0 +1,95 @@
+{% assign grad_posts = site.posts | where: "category", "graduate" %}
+
+{% if grad_posts and grad_posts.size > 0 %}
+
+<!-- ===================================================== -->
+<!-- Detecta se existe mais de uma academic_area           -->
+<!-- Se existir apenas UMA area -> usa academic_field      -->
+<!-- Caso contrario -> usa academic_area                   -->
+<!-- ===================================================== -->
+
+{% assign grad_areas_raw = grad_posts | map: "academic_area" | compact | uniq %}
+
+{% if grad_areas_raw.size == 1 %}
+{% assign classification_mode = "field" %}
+{% assign filter_values = grad_posts | map: "academic_field" | compact | uniq | sort_natural %}
+{% assign filter_label = "Fields" %}
+{% assign filter_all_label = "All Fields" %}
+{% else %}
+{% assign classification_mode = "area" %}
+{% assign filter_values = grad_posts | map: "academic_area" | compact | uniq | sort_natural %}
+{% assign filter_label = "Areas" %}
+{% assign filter_all_label = "All Areas" %}
+{% endif %}
+
+<!-- Portfolio Grid Section (Grad) -->
+<section id="portfolio">
+  <div class="container portfolio-flex-grid">
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h2>Grad</h2>
+        <hr class="star-primary">
+      </div>
+
+      <!-- Dropdown -->
+      {% if filter_values and filter_values.size > 0 %}
+      <select id="areaFilter-grad" class="form-control" style="display:inline-block;max-width:260px;margin:8px 0 16px;">
+
+        <option value="all">{{ filter_all_label }}</option>
+
+        {% for value in filter_values %}
+        {% if value %}
+        <option value="{{ value | slugify }}">
+          {{ value }}
+        </option>
+        {% endif %}
+        {% endfor %}
+
+      </select>
+      {% endif %}
+    </div>
+
+    <div class="portfolio-flex-row" id="grid-grad">
+
+      {% for post in grad_posts %}
+
+      {% if classification_mode == "field" %}
+      {% assign filter_key = post.academic_field %}
+      {% else %}
+      {% assign filter_key = post.academic_area %}
+      {% endif %}
+
+      <div class="portfolio-flex-item portfolio-item" data-area="{{ filter_key | slugify }}">
+
+        <div class="card-title text-center">
+          {{ post.title }}
+        </div>
+
+        {% if post.link %}
+        <a href="{{ post.link | relative_url }}?utm_source={{ site.utm_source }}&utm_medium=portfolio"
+          class="portfolio-link" rel="noopener">
+          {% else %}
+          <a href="#portfolioModal-{{ post.modal-id }}" class="portfolio-link" data-toggle="modal">
+            {% endif %}
+
+            <div class="thumb">
+              <img src="img/portfolio/{{ post.img }}" alt="{{ post.alt | default: post.title }}">
+
+              <div class="caption" aria-hidden="true">
+                <div class="caption-content">
+                  <i class="fa-solid fa-bolt fa-3x"></i>
+                </div>
+              </div>
+            </div>
+
+          </a>
+      </div>
+
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% endif %}
